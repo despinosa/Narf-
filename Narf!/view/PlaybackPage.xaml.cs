@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -14,44 +17,49 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using Emgu.CV;
-
-namespace Narf_ {
+namespace Narf_.view {
   /// <summary>
   /// Lógica de interacción para PlaybackPage.xaml
   /// </summary>
   public partial class PlaybackPage : Page {
+    private string videoPath = "/resources/sample.mp4";
     private Capture capture;
+    private TimeSpan refreshInterval;
+    private CancellationToken token = CancellationToken.None;
 
     public PlaybackPage() {
       InitializeComponent();
+      capture = new Capture(videoPath);
     }
 
-    private async Task RunPeriodicAsync(Action onTick, TimeSpan interval,
-                                        CancellationToken token) {
+    private async Task PeriodicRefresh() {
       while (!token.IsCancellationRequested) {
-        onTick?.Invoke();
-        if (interval > TimeSpan.Zero) await Task.Delay(interval, token);
+        ((Action) Refresh).Invoke();
+        if (refreshInterval > TimeSpan.Zero) {
+          await Task.Delay(refreshInterval, token);
+        }
       }
     }
 
     private void Refresh() {
       Mat image = capture.QueryFrame();
-      videoDisplay.Image = image;
+      if (image == null) token = new CancellationToken();
+      else videoDisplay.Image = image;
     }
 
-    public void videoDisplay_Loaded(Object sender, EventArgs args) {
+    private void videoDisplay_LoadCompleted(object sender,
+                                            AsyncCompletedEventArgs e) {
       if (capture == null) {
         try {
-          capture = new Capture("sample.mp4");
+          capture = new Capture(videoPath);
         } catch (NullReferenceException ex) {
           MessageBox.Show(ex.Message);
           return;
         }
       }
-      Double fps = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.Fps);
-      TimeSpan interval = TimeSpan.FromMilliseconds(1000 / fps);
-      RunPeriodicAsync(Refresh, interval, CancellationToken.None);
+      Double fps = capture.GetCaptureProperty(CapProp.Fps);
+      refreshInterval = TimeSpan.FromSeconds(1 / fps);
+      PeriodicRefresh();
     }
   }
 }

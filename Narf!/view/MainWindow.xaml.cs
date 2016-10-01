@@ -13,16 +13,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Narf_
-{
-    /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : NavigationWindow
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+namespace Narf_.view {
+  /// <summary>
+  /// Lógica de interacción para MainWindow.xaml
+  /// </summary>
+  public partial class MainWindow : NavigationWindow {
+    public MainWindow() {
+      InitializeComponent();
     }
+  }
 }

@@ -1,4 +1,4 @@
-﻿<Page x:Class="Narf_.PlaybackPage"
+﻿<Page x:Class="Narf_.view.PlaybackPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -17,7 +17,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <WindowsFormsHost Grid.Column="0" Grid.Row="0">
-            <emgu:ImageBox x:Name="videoDisplay" SizeMode="AutoSize"/>
+            <emgu:ImageBox x:Name="videoDisplay" SizeMode="AutoSize" LoadCompleted="videoDisplay_LoadCompleted"/>
         </WindowsFormsHost>
         <!-- <Image x:Name="videoDisplay" HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="320"/> -->
     </Grid>
