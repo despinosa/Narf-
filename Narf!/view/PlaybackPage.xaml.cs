@@ -1,5 +1,8 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Microsoft.Win32;
+using Narf.Logic;
+using Narf.Model;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,19 +20,24 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Narf_.view {
+namespace Narf.View {
   /// <summary>
   /// Lógica de interacción para PlaybackPage.xaml
   /// </summary>
   public partial class PlaybackPage : Page {
-    private string videoPath = "/resources/sample.mp4";
-    private Capture capture;
+    private string videoPath;
+    private Analyzer analyzer;
     private TimeSpan refreshInterval;
     private CancellationToken token = CancellationToken.None;
 
-    public PlaybackPage() {
+    public PlaybackPage(string videoPath, MazeType mazeType) {
+      this.videoPath = videoPath;
+      if (mazeType == MazeType.Cross) {
+        analyzer = new XMazeAnalyzer(videoPath);
+      } else if (mazeType == MazeType.None) {
+        analyzer = new NoMazeAnalyzer(videoPath);
+      }
       InitializeComponent();
-      capture = new Capture(videoPath);
     }
 
     private async Task PeriodicRefresh() {
@@ -42,24 +50,21 @@ namespace Narf_.view {
     }
 
     private void Refresh() {
-      Mat image = capture.QueryFrame();
+      Mat image = analyzer.QueryFrame();
       if (image == null) token = new CancellationToken();
       else videoDisplay.Image = image;
     }
 
     private void videoDisplay_LoadCompleted(object sender,
                                             AsyncCompletedEventArgs e) {
-      if (capture == null) {
-        try {
-          capture = new Capture(videoPath);
-        } catch (NullReferenceException ex) {
-          MessageBox.Show(ex.Message);
-          return;
-        }
+      try {
+        double fps = analyzer.GetCaptureProperty(CapProp.Fps);
+        refreshInterval = TimeSpan.FromSeconds(1 / fps);
+        PeriodicRefresh();
+      } catch (NullReferenceException ex) {
+        MessageBox.Show(ex.Message);
+        return;
       }
-      Double fps = capture.GetCaptureProperty(CapProp.Fps);
-      refreshInterval = TimeSpan.FromSeconds(1 / fps);
-      PeriodicRefresh();
     }
   }
 }
