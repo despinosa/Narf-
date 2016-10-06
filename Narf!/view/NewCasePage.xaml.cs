@@ -13,12 +13,21 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Narf_.view {
+namespace Narf.View {
   /// <summary>
-  /// Lógica de interacción para NewAnalysisPage.xaml
+  /// Lógica de interacción para NewCasePage.xaml
   /// </summary>
-  public partial class NewAnalysisPage : Page {
-    public NewAnalysisPage() {
+  public partial class NewCasePage : Page {
+    protected PlaybackPage _playbackPage;
+    public PlaybackPage PlaybackPage {
+      get {
+        return _playbackPage;
+      }
+      protected set {
+        _playbackPage = value;
+      }
+    }
+    public NewCasePage(string videoPath) {
       InitializeComponent();
     }
   }

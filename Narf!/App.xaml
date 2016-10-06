@@ -1,7 +1,7 @@
-﻿<Application x:Class="Narf_.App"
+﻿<Application x:Class="Narf.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:Narf_"
+             xmlns:local="clr-namespace:Narf"
              StartupUri="view/MainWindow.xaml">
     <Application.Resources>
          
