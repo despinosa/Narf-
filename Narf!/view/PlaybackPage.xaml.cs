@@ -30,11 +30,11 @@ namespace Narf.View {
     private TimeSpan refreshInterval;
     private CancellationToken token = CancellationToken.None;
 
-    public PlaybackPage(string videoPath, MazeType mazeType) {
+    public PlaybackPage(string videoPath, Maze mazeType) {
       this.videoPath = videoPath;
-      if (mazeType == MazeType.Cross) {
+      if (mazeType == Maze.Cross) {
         analyzer = new XMazeAnalyzer(videoPath);
-      } else if (mazeType == MazeType.None) {
+      } else if (mazeType == Maze.None) {
         analyzer = new NoMazeAnalyzer(videoPath);
       }
       InitializeComponent();

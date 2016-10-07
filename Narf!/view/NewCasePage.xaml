@@ -4,34 +4,122 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Narf.View"
+      xmlns:ext="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+      xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="540" d:DesignWidth="720"
+      d:DesignHeight="540" d:DesignWidth="620"
       Title="Nuevo caso de estudio">
 
-    <Grid>
+  <Grid Margin="0" Height="520" Width="600">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition/>
+      <ColumnDefinition/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="30"/>
+      <RowDefinition Height="280"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="30"/>
+    </Grid.RowDefinitions>
+    <!-- Header -->
+    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="#0066cc" Content="Nuevo caso de estudio"/>
+    <!-- Maze chooser -->
+    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeTypeCombo">
+      <ComboBox.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Orientation="Horizontal">
+            <Rectangle Fill="{Binding Name}" />
+            <TextBlock Text="{Binding Name}" />
+          </StackPanel>
+        </DataTemplate>
+      </ComboBox.ItemTemplate>
+    </ComboBox>
+    <!-- Preview -->
+    <WindowsFormsHost Grid.Column="0" Grid.Row="1" Margin="5" Width="465" Height="270" Grid.ColumnSpan="2">
+      <emgu:ImageBox x:Name="previewDisplay"  Width="465" Height="270"/>
+    </WindowsFormsHost>
+    <!-- Substance & Dose -->
+    <GroupBox Grid.Row="2" Grid.Column="0">
+      <GroupBox.Header>
+        <StackPanel Orientation="Horizontal">
+          <Label FontFamily="Wingdings" FontSize="17" Content="S"/>
+          <Label Content="Tratamiento"/>
+        </StackPanel>
+      </GroupBox.Header>
+      <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="435"/>
+          <ColumnDefinition Width="100"/>
+          <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="2" Grid.Column="0">Rata</Label>
-        <ComboBox Grid.Row="2" Grid.Column="1"></ComboBox>
-        <Label Grid.Row="2" Grid.Column="0">Rata</Label>
-        <ComboBox Grid.Row="2" Grid.Column="1"></ComboBox>
-        
-        <Button Name="newBttn" Grid.Column="2" Grid.Row="9" Margin="0,10,0,0" Width="125"
-Height="25" HorizontalAlignment="Right">Iniciar</Button>
-    </Grid>
+        <Label Grid.Row="0" Grid.Column="0" Content="Sustancia"/>
+        <TextBox Grid.Row="0" Grid.Column="1"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Dosis"/>
+        <ext:DecimalUpDown Grid.Row="1" Grid.Column="1"/>
+      </Grid>
+    </GroupBox>
+    <!-- Subject & Weight -->
+    <GroupBox Grid.Row="2" Grid.Column="1">
+      <GroupBox.Header>
+        <StackPanel Orientation="Horizontal">
+          <Label FontFamily="Wingdings" FontSize="17" Content="8"/>
+          <Label Content="Sujeto"/>
+        </StackPanel>
+      </GroupBox.Header>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="100"/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Column="0" Grid.Row="0" Content="Nombre"/>
+        <TextBox Grid.Column="1" Grid.Row="0"/>
+        <Label Grid.Column="0" Grid.Row="1" Content="Peso"/>
+        <ext:DecimalUpDown Grid.Column="1" Grid.Row="1"/>
+      </Grid>
+    </GroupBox>
+    <!-- Date & Duration -->
+    <GroupBox Grid.Row="3" Grid.Column="0">
+      <GroupBox.Header>
+        <StackPanel Orientation="Horizontal">
+          <Label FontFamily="Wingdings" FontSize="17" Content="6"/>
+          <Label Content="Tiempo"/>
+        </StackPanel>
+      </GroupBox.Header>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="100"/>
+          <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Fecha"/>
+        <ext:DateTimePicker Grid.Row="0" Grid.Column="1"/>
+        <Label Grid.Row="1" Grid.Column="0" Content="Duración"/>
+        <ext:DateTimeUpDown Grid.Row="1" Grid.Column="1" Format="Custom" FormatString="m:ss" />
+      </Grid>
+    </GroupBox>
+    <!-- Notes -->
+    <GroupBox Grid.Row="3" Grid.Column="1">
+      <GroupBox.Header>
+        <StackPanel Orientation="Horizontal">
+          <Label FontFamily="Wingdings" FontSize="17" Content="2"/>
+          <Label Content="Notas"/>
+        </StackPanel>
+      </GroupBox.Header>
+      <TextBox AcceptsReturn="True" TextWrapping="Wrap"/>
+    </GroupBox>
+    <!-- Start button -->
+    <Button Name="newBttn" Grid.Column="1" Grid.Row="4" Width="125"
+    Height="25" HorizontalAlignment="Right">Iniciar</Button>
+  </Grid>
 </Page>

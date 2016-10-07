@@ -6,62 +6,86 @@
       xmlns:local="clr-namespace:Narf"
       xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="540" d:DesignWidth="720"
+      d:DesignHeight="540" d:DesignWidth="620"
+      WindowTitle="Narf! | Página principal"
       Title="HomePage">
 
-<Grid Margin="25">
-  <Grid.ColumnDefinitions>
-    <ColumnDefinition />
-    <ColumnDefinition Width="435" />
-  </Grid.ColumnDefinitions>
-  <Grid.RowDefinitions>
-    <RowDefinition />
-    <RowDefinition Height="Auto"/>
-    <RowDefinition Height="240"/>
-    <RowDefinition Height="Auto"/>
-  </Grid.RowDefinitions>
-  <Label Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="#0066cc" Content="Asistente para análisis de ansiedad"/>
-  <Border Grid.Column="0" Grid.Row="1" Height="35" Padding="5" Background="#4E87D4">
-    <Label VerticalAlignment="Center" Foreground="White">Casos previos</Label>
-  </Border>
-  <ListView Name="casesList" Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Cases}">
-    <ListView.View>
-      <GridView>
-        <GridViewColumn Header="Rata" DisplayMemberBinding="{Binding Rat}" />
-        <GridViewColumn Header="Sustancia" DisplayMemberBinding="{Binding Substance}" />
-        <GridViewColumn Header="Fecha">
-          <GridViewColumn.CellTemplate>
+  <Grid Margin="10" Height="520" Width="600">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition />
+      <ColumnDefinition Width="105"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="30"/>
+      <RowDefinition Height="280"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <!-- Header -->
+    <Label Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="#0066cc" Content="Asistente para análisis ansiolítico en roedores"/>
+    <!-- Preview -->
+    <WindowsFormsHost Grid.Column="0" Grid.Row="1" Margin="5" Width="465" Height="270" Grid.ColumnSpan="2">
+      <emgu:ImageBox x:Name="previewDisplay"  Width="465" Height="270"/>
+    </WindowsFormsHost>
+    <!-- Subtitle -->
+    <Border Grid.Column="0" Grid.Row="2" Height="Auto" Padding="5" Background="#4E87D4">
+      <Label VerticalAlignment="Center" Foreground="White">Casos previos</Label>
+    </Border>
+    <!-- List -->
+    <ListView Name="casesList" Grid.Column="0" Grid.Row="3" Grid.RowSpan="4" Height="170" ItemsSource="{Binding Cases}" SelectionMode="Single" >
+      <ListView.View>
+        <GridView>
+          <GridViewColumn Header="Sustancia" DisplayMemberBinding="{Binding Substance}" />
+          <GridViewColumn Header="Dosis">
+            <GridViewColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Dose, StringFormat=0.## mg/kg}" />
+              </DataTemplate>
+            </GridViewColumn.CellTemplate>
+          </GridViewColumn>
+          <GridViewColumn Header="Fecha" DisplayMemberBinding="{Binding Date}" /> 
+          <GridViewColumn Header="Duración" DisplayMemberBinding="{Binding Duration}" />
+          <GridViewColumn Header="Sujeto" DisplayMemberBinding="{Binding Subject}" />
+          <GridViewColumn Header="Peso">
+            <GridViewColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Weight, StringFormat=0.## g}" />
+              </DataTemplate>
+            </GridViewColumn.CellTemplate>
+          </GridViewColumn>
+        </GridView>
+      </ListView.View>
+      <ListView.GroupStyle>
+        <GroupStyle>
+          <GroupStyle.HeaderTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Date, StringFormat=dd/MM/yyyy}" />
+              <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"/>
             </DataTemplate>
-          </GridViewColumn.CellTemplate>
-        </GridViewColumn>
-      </GridView>
-    </ListView.View>
-    <ListView.GroupStyle>
-      <GroupStyle>
-        <GroupStyle.HeaderTemplate>
-          <DataTemplate>
-            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"/>
-          </DataTemplate>
-        </GroupStyle.HeaderTemplate>
-      </GroupStyle>
-    </ListView.GroupStyle>
+          </GroupStyle.HeaderTemplate>
+        </GroupStyle>
+      </ListView.GroupStyle>
     </ListView>
-  <!-- Analyze new button -->
-  <Button Name="newBttn" Grid.Column="0" Grid.Row="3" Margin="0,10,0,0" Width="125"
-  Height="25" HorizontalAlignment="Left" Click="newBttn_Click">Nuevo...</Button>
-        
-  <!-- Preview -->
-  <WindowsFormsHost Grid.Column="1" Grid.Row="2" Margin="10, 0, 0, 0" Width="425" Height="240">
-    <emgu:ImageBox x:Name="previewDisplay" />
-  </WindowsFormsHost>
 
-  <!-- View report button -->
-  <Button Name="resultsBttn" Grid.Column="1" Grid.Row="3" Margin="0,10,0,0" Width="125"
-  Height="25" HorizontalAlignment="Right">Resultados</Button>
-</Grid>
-<!-- Page.Background>
+    <!-- Settings button -->
+    <Button Name="settingsBttn" Grid.Column="1" Grid.Row="2" Width="100"
+  Height="25" HorizontalAlignment="Right">Ajustes</Button>
+    <!-- Help button -->
+    <Button Name="helpBttn" Grid.Column="1" Grid.Row="3" Width="100"
+  Height="25" HorizontalAlignment="Right" VerticalAlignment="Top">Ayuda</Button>
+    <!-- Analyze new button -->
+    <Button Name="newCaseBttn" Grid.Column="1" Grid.Row="4" Width="100"
+  Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="newCaseBttn_Click">Nuevo caso...</Button>
+    <!-- View report button -->
+    <Button Name="delCaseBttn" Grid.Column="1" Grid.Row="5" Width="100"
+  Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="delCaseBttn_Click">Eliminar caso</Button>
+    <!-- View report button -->
+    <Button Name="resultsBttn" Grid.Column="1" Grid.Row="6" Width="100"
+  Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom">Ver resultados</Button>
+  </Grid>
+  <!-- Page.Background>
 <ImageBrush ImageSource="/resources/background.jpg"/>
 </ -->
 </Page>
