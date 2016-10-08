@@ -146,8 +146,8 @@
     <Compile Include="Logic\NoMazeAnalyzer.cs" />
     <Compile Include="Logic\XMazeAnalyzer.cs" />
     <Compile Include="Model\Case.cs" />
-    <Compile Include="View\OverlayCanvas.xaml.cs">
-      <DependentUpon>OverlayCanvas.xaml</DependentUpon>
+    <Compile Include="View\OverlayPanel.xaml.cs">
+      <DependentUpon>OverlayPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RadialPanel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
@@ -162,7 +162,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\OverlayCanvas.xaml">
+    <Page Include="View\OverlayPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -215,6 +215,7 @@
     <Resource Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\UIStyles.Overlay.bmp" />
     <Resource Include="Resources\background.jpg" />
     <Resource Include="Resources\offline.png" />
     <Content Include="Resources\sample.mp4" />

@@ -6,19 +6,21 @@
       xmlns:local="clr-namespace:Narf"
       xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="350"
+      d:DesignHeight="540" d:DesignWidth="620"
       Title="Narf! - Home">
 
-    <Grid Margin="10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <WindowsFormsHost Grid.Column="0" Grid.Row="0">
-            <emgu:ImageBox x:Name="videoDisplay" SizeMode="AutoSize" LoadCompleted="videoDisplay_LoadCompleted"/>
-        </WindowsFormsHost>
-        <!-- <Image x:Name="videoDisplay" HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="320"/> -->
-    </Grid>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="310"/>
+      <ColumnDefinition Width="310"/>
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="340"/>
+      <RowDefinition Height="180"/>
+    </Grid.RowDefinitions>
+    <WindowsFormsHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+      <emgu:ImageBox x:Name="videoDisplay" SizeMode="AutoSize" LoadCompleted="videoDisplay_LoadCompleted"/>
+    </WindowsFormsHost>
+    <!-- <Image x:Name="videoDisplay" HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="320"/> -->
+  </Grid>
 </Page>
