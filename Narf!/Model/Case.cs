@@ -10,11 +10,15 @@ namespace Narf.Model {
   public class Maze {
     private static Maze _none;
     private static Maze _cross;
+    private static Maze[] _all;
     public string Name { get; }
     public Type Type { get; }
-    private Maze(string name, Type type) {
-      Name = name;
-      Type = type;
+
+    public static Maze[] All {
+      get {
+        if (_all == null) _all = new Maze[] { None, Cross };
+        return _all;
+      }
     }
     public static Maze None {
       get {
@@ -32,6 +36,11 @@ namespace Narf.Model {
         return _cross;
       }
     }
+    private Maze(string name, Type type) {
+      Name = name;
+      Type = type;
+    }
+
     override public string ToString() {
       return Name;
     }
@@ -39,15 +48,15 @@ namespace Narf.Model {
 
 
   public class Case {
-    public Maze Maze { get; set; }
     public DateTime Date { get; set; }
-    public TimeSpan Duration { get; set; }
-    public string Substance { get; set; }
     public decimal Dose { get; set; }
-    public string Subject { get; set; }
-    public decimal Weight { get; set; }
+    public TimeSpan Duration { get; set; }
+    public Maze Maze { get; set; }
     public string Notes { get; set; }
-    public string VideoHash { get; set; }
     public Mat Preview { get; set; }
+    public string Subject { get; set; }
+    public string Substance { get; set; }
+    public string VideoHash { get; set; }
+    public decimal Weight { get; set; }
   }
 }

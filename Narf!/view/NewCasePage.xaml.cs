@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Emgu.CV;
+using Narf.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,17 +20,28 @@ namespace Narf.View {
   /// Lógica de interacción para NewCasePage.xaml
   /// </summary>
   public partial class NewCasePage : Page {
-    protected PlaybackPage _playbackPage;
-    public PlaybackPage PlaybackPage {
-      get {
-        return _playbackPage;
+    public Capture[] Captures { get; protected set; }
+    public Case Case { get; protected set; }
+    public PlaybackPage PlaybackPage { get; protected set; }
+
+
+    public NewCasePage(string[] videoPaths) {
+      Captures = new Capture[videoPaths.Length];
+      for (int i = 0; i < videoPaths.Length; i++) {
+        Captures[i] = new Capture(videoPaths[i]);
       }
-      protected set {
-        _playbackPage = value;
-      }
-    }
-    public NewCasePage(string videoPath) {
       InitializeComponent();
+      mazeCombo.ItemsSource = Maze.All;
+    }
+
+    private void newBttn_Click(object sender, RoutedEventArgs e) {
+      Case = new Case() {
+        Date = new DateTime(2016, 8, 30), Duration = new TimeSpan(0, 5, 8),
+        Substance = "SSRI", Dose = 9M, Subject = "Cerebro", Weight = 231.7M,
+        Maze = (Maze) mazeCombo.SelectedItem
+      };
+      PlaybackPage = new PlaybackPage(Case, Captures);
+      NavigationService.Navigate(PlaybackPage);
     }
   }
 }

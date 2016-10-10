@@ -89,15 +89,5 @@ namespace Narf.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
-        /// <summary>
-        ///   Busca un recurso adaptado de tipo System.Byte[].
-        /// </summary>
-        internal static byte[] sample {
-            get {
-                object obj = ResourceManager.GetObject("sample", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

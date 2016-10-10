@@ -16,29 +16,22 @@ namespace Narf.View {
   /// Lógica de interacción para HomePage.xaml
   /// </summary>
   public partial class HomePage : Page {
-    protected NewCasePage _newCasePage;
-    List<Case> Cases { get; set; }
-    public NewCasePage NewCasePage {
-      get {
-        return _newCasePage;
-      }
-      protected set {
-        _newCasePage = value;
-      }
-    }
+    public List<Case> Cases { get; protected set; }
+    public NewCasePage NewCasePage { get; protected set; }
+
+
     public HomePage() {
       InitializeComponent();
       testInit();
 
-      CollectionView view = (CollectionView)CollectionViewSource.
+      var view = (CollectionView)CollectionViewSource.
           GetDefaultView(casesList.ItemsSource);
-      PropertyGroupDescription description =
-          new PropertyGroupDescription("Maze");
+      var description = new PropertyGroupDescription("Maze");
       view.GroupDescriptions.Add(description);
     }
 
     private void testInit() {
-      Mat image = new Mat(270, 465, DepthType.Cv8U, 3);
+      var image = new Mat(270, 465, DepthType.Cv8U, 3);
       image.SetTo(new Bgr(111, 111, 111).MCvScalar);
       CvInvoke.PutText(image, "Preview", new System.Drawing.Point(10, 50),
                        FontFace.HersheyPlain, 3.0,
@@ -75,23 +68,22 @@ namespace Narf.View {
     }
 
     private void newCaseBttn_Click(object sender, RoutedEventArgs args) {
-      OpenFileDialog fileDialog = new OpenFileDialog();
-      fileDialog.Multiselect = false;
+      var fileDialog = new OpenFileDialog();
+      fileDialog.Multiselect = true;
       fileDialog.DefaultExt = ".avi";
-      fileDialog.Filter = "Archivos AVI (*.avi)|*.avi | " + 
+      fileDialog.Filter = "Archivos AVI (*.avi)|*.avi|" + 
         "Archivos MP4 (*.mp4)|*.mp4";
       bool? result = fileDialog.ShowDialog();
-      if(result == true) {
-        NewCasePage = new NewCasePage(fileDialog.FileName);
+      if (result == true) {
+        NewCasePage = new NewCasePage(fileDialog.FileNames);
         NavigationService.Navigate(NewCasePage);
       }
     }
 
     private void delCaseBttn_Click(object sender, RoutedEventArgs e) {
-      MessageBoxResult? result = MessageBox.Show("¿Eliminar caso de estudio?",
-                                                 "Eliminar caso",
-                                                 MessageBoxButton.YesNo,
-                                                 MessageBoxImage.Exclamation);
+      var result = MessageBox.Show("¿Eliminar caso de estudio?",
+                                   "Eliminar caso", MessageBoxButton.YesNo,
+                                   MessageBoxImage.Exclamation);
       if (result == MessageBoxResult.Yes) {
       }
     }

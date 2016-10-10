@@ -6,21 +6,29 @@
       xmlns:local="clr-namespace:Narf"
       xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="540" d:DesignWidth="620"
-      Title="Narf! - Home">
+      d:DesignHeight="555" d:DesignWidth="635"
+      Title="Narf! - Análisis de video" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
 
-  <Grid>
+  <Grid Margin="5" Initialized="Grid_Initialized">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="310"/>
-      <ColumnDefinition Width="310"/>
+      <ColumnDefinition Width="312.5"/>
+      <ColumnDefinition Width="312.5"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="340"/>
+      <RowDefinition Height="365"/>
       <RowDefinition Height="180"/>
     </Grid.RowDefinitions>
-    <WindowsFormsHost Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
-      <emgu:ImageBox x:Name="videoDisplay" SizeMode="AutoSize" LoadCompleted="videoDisplay_LoadCompleted"/>
-    </WindowsFormsHost>
-    <!-- <Image x:Name="videoDisplay" HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="320"/> -->
+    <Image Grid.Column="0" Grid.Row="0" Height="360" Width="620" Margin="0, 0, 0, 5" Grid.ColumnSpan="2" Name="mainDisplay"/>
+    <!-- WindowsFormsHost Grid.Column="0" Grid.Row="0" Margin="0, 0, 0, 5" Grid.ColumnSpan="2">
+      <emgu:ImageBox x:Name="mainDisplay" SizeMode="AutoSize"/>
+    </WindowsFormsHost -->
+    <Image Grid.Column="0" Grid.Row="1" Height="180" Width="310" HorizontalAlignment="Left" Name="leftDisplay"/>
+    <!-- WindowsFormsHost Grid.Column="0" Grid.Row="1" Margin="0, 0, 2.5, 0">
+      <emgu:ImageBox x:Name="leftDisplay" SizeMode="AutoSize"/>
+    </WindowsFormsHost -->
+    <Image Grid.Column="1" Grid.Row="1" Height="180" Width="310" HorizontalAlignment="Right" Name="rightDisplay"/>
+    <!-- WindowsFormsHost Grid.Column="1" Grid.Row="1" Margin="2.5, 0, 0, 0">
+      <emgu:ImageBox x:Name="rightDisplay" SizeMode="AutoSize"/>
+    </WindowsFormsHost -->
   </Grid>
 </Page>

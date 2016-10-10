@@ -1,63 +1,74 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="Narf.logic.Analyzer" Collapsed="true">
-    <Position X="6.75" Y="5" Width="1.5" />
+  <Class Name="Narf.Logic.Analyzer" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAIAEAAAAAAAAAAAAAA=</HashCode>
-      <FileName>logic\Analyzer.cs</FileName>
+      <HashCode>AACAAAAAgAAAAAAAAAAAAAAAAAIAAAQAAAAAAAAgAAA=</HashCode>
+      <FileName>Logic\Analyzer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Narf.logic.NoMazeAnalyzer" Collapsed="true">
-    <Position X="5.75" Y="6" Width="1.5" />
+  <Class Name="Narf.Logic.NoMazeAnalyzer" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>logic\NoMazeAnalyzer.cs</FileName>
+      <FileName>Logic\NoMazeAnalyzer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Narf.logic.XMazeAnalyzer" Collapsed="true">
-    <Position X="7.75" Y="6" Width="1.5" />
+  <Class Name="Narf.Logic.XMazeAnalyzer" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>logic\XMazeAnalyzer.cs</FileName>
+      <FileName>Logic\XMazeAnalyzer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Narf.view.HomePage" Collapsed="true">
-    <Position X="1.25" Y="2.5" Width="1.5" />
+  <Class Name="Narf.Model.Maze" Collapsed="true">
+    <Position X="2.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAAEAAAAAAAAAABAA=</HashCode>
-      <FileName>view\HomePage.xaml.cs</FileName>
+      <HashCode>BAAABAAAAAAAAAAEAAAAAAQAAAAAAAAAAQCAAAEAAAA=</HashCode>
+      <FileName>Model\Case.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Narf.Model.Case" Collapsed="true">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEBgAAAAAACCAAAAAIAAAAAAACAAAAABAAQAAAIAAAA=</HashCode>
+      <FileName>Model\Case.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Narf.View.HomePage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAgAAAAAAAgAAgEAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>View\HomePage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Narf.View.NewCasePage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>View\NewCasePage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Narf.View.OverlayPanel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>View\OverlayPanel.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Narf.View.PlaybackPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAIBAAAAAAAAAAAAAgAAEIAAAAFAAAAAAAAA=</HashCode>
+      <FileName>View\PlaybackPage.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="NewCasePage" />
+      <Property Name="OverlayPanel" />
     </ShowAsAssociation>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="Narf.view.MainWindow" Collapsed="true">
-    <Position X="1.25" Y="1.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>view\MainWindow.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="Narf.view.NewCasePage" Collapsed="true">
-    <Position X="4" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
-      <FileName>view\NewCasePage.xaml.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="PlaybackPage" />
-    </ShowAsAssociation>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="Narf.view.PlaybackPage" Collapsed="true">
-    <Position X="6.75" Y="2.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAFAAAAAAABAAAAAAAAAAAAAgAAAIAAAAFAAAAAAAAA=</HashCode>
-      <FileName>view\PlaybackPage.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
