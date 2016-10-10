@@ -221,6 +221,7 @@
     <Resource Include="Resources\offline.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Model\DB\" />
     <Folder Include="Test\" />
   </ItemGroup>
   <ItemGroup>
