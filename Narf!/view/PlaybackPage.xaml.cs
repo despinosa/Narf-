@@ -21,29 +21,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Narf.View {
   /// <summary>
   /// Lógica de interacción para PlaybackPage.xaml
   /// </summary>
   public partial class PlaybackPage : Page {
-    public Analyzer Analyzer { get; }
     private int AngleRefreshFlag { get; set; } = 0;
     private CancellationToken Token { get; set; } = CancellationToken.None;
+    private DispatcherTimer[] RefreshTimers { get; set; }
+    public Analyzer Analyzer { get; }
     public Image[] Displays { get; }
     public OverlayPanel OverlayPanel { get; protected set; }
-    public TimeSpan[] RefreshIntervals { get; }
 
     public PlaybackPage(Case case_, Capture[] captures) {
       Analyzer = Analyzer.ForCase(case_, captures);
-      RefreshIntervals = new TimeSpan[3];
+      RefreshTimers  = new DispatcherTimer[3];
       Displays = new Image[3];
       InitializeComponent();
       Displays[(int)SourceAngle.Aerial] = mainDisplay;
-      if (captures.Length > 1) Displays[(int)SourceAngle.Closed] = leftDisplay;
-      if (captures.Length > 2) Displays[(int)SourceAngle.Open] = rightDisplay;
+      Displays[(int)SourceAngle.Closed] = leftDisplay;
+      Displays[(int)SourceAngle.Open] = rightDisplay;
+      foreach (DispatcherTimer timer in RefreshTimers) {
+        timer.IsEnabled = true;
+      }
     }
 
+    /*
     protected async Task PeriodicRefresh(SourceAngle angle) {
       while (!Token.IsCancellationRequested) {
         AngleRefreshFlag += 1 >> (int)angle;
@@ -52,20 +57,15 @@ namespace Narf.View {
           await Task.Delay(RefreshIntervals[(int)angle], Token);
         }
       }
-    }
+    } */
 
-    protected void Refresh() {
-      for (int angle = 0; AngleRefreshFlag != 0; angle++) {
-        int angleChooser = (1 << angle) & AngleRefreshFlag;
-        if (angleChooser != 0) {
-          var frame =  Analyzer.Sources[angle].QueryFrame();
-          if (frame == null) {
-            Token = new CancellationToken();
-          } else {
-            Displays[angle].Source = BitmapSourceConvert.ToBitmapSource(frame);
-          }
-          AngleRefreshFlag -= angleChooser;
-        }
+    protected void Refresh(dynamic sender, EventArgs args) {
+      var frame =  Analyzer.Sources[(int)sender.Tag].QueryFrame();
+      if (frame == null) {
+        sender.IsEnabled = false;
+      } else {
+        Displays[(int)sender.Tag].Source = BitmapSourceConvert.
+          ToBitmapSource(frame);
       }
     }
 
@@ -74,8 +74,10 @@ namespace Narf.View {
         if (Analyzer.Sources[(int)angle] != null) {
           double fps = Analyzer.Sources[(int)angle].
             GetCaptureProperty(CapProp.Fps);
-          RefreshIntervals[(int)angle] = TimeSpan.FromSeconds(1 / fps);
-          PeriodicRefresh(angle);
+          RefreshTimers[(int)angle] = new DispatcherTimer() {
+            Interval = TimeSpan.FromSeconds(1 / fps), Tag = angle
+          };
+          RefreshTimers[(int)angle].Tick += Refresh;
         }
       }
     }

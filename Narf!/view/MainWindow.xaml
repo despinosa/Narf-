@@ -5,4 +5,4 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Narf"
         mc:Ignorable="d"
-        Title="MainWindow" Source="HomePage.xaml" ResizeMode="NoResize" Width="640" Height="610"/>
+        Title="MainWindow" Source="HomePage.xaml" ResizeMode="NoResize" Width="655" Height="625"/>

@@ -20,6 +20,7 @@ namespace Narf.View {
     protected override Size ArrangeOverride(Size size) {
       if (Children.Count == 0) return size;
 
+      // in rads
       double deltaTheta = (2.0 * Math.PI) / Children.Count;
       double theta = 3 * Math.PI / 2;
      
@@ -40,7 +41,7 @@ namespace Narf.View {
         var actual = new Point(size.Width/2 + ideal.X - farthest.X/2,
                                size.Height/2 + ideal.Y - farthest.Y/2);
 
-        double phi = 180 * ((theta / Math.PI) % 1) - 90;
+        double phi = 180 * ((theta / Math.PI) % 1) - 90; // in degs
         var rotate = new RotateTransform(phi, farthest.X/2, farthest.Y/2);
 
         elem.Arrange(new Rect(actual.X, actual.Y, farthest.X, farthest.Y));
