@@ -145,6 +145,7 @@
     <Compile Include="Logic\Analyzer.cs" />
     <Compile Include="Logic\NoMazeAnalyzer.cs" />
     <Compile Include="Logic\XMazeAnalyzer.cs" />
+    <Compile Include="Model\Behaviour.cs" />
     <Compile Include="Model\Case.cs" />
     <Compile Include="View\OverlayPanel.xaml.cs">
       <DependentUpon>OverlayPanel.xaml</DependentUpon>

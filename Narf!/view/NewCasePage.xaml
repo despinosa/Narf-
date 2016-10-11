@@ -25,7 +25,7 @@
     <!-- Header -->
     <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="#0066cc" Content="Nuevo caso de estudio"/>
     <!-- Maze chooser -->
-    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeCombo">
+    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeCombo" Margin="10, 0" FontSize="16" HorizontalContentAlignment="Right">
       <ComboBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
@@ -71,7 +71,7 @@
       </Button>
     </Grid>
     <!-- Substance & Dose -->
-    <GroupBox Grid.Row="2" Grid.Column="0">
+    <GroupBox Grid.Row="2" Grid.Column="0" Margin="10, 0">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="S"/>
@@ -94,7 +94,7 @@
       </Grid>
     </GroupBox>
     <!-- Subject & Weight -->
-    <GroupBox Grid.Row="2" Grid.Column="1">
+    <GroupBox Grid.Row="2" Grid.Column="1" Margin="10, 0">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="8"/>
@@ -117,7 +117,7 @@
       </Grid>
     </GroupBox>
     <!-- Date & Duration -->
-    <GroupBox Grid.Row="3" Grid.Column="0">
+    <GroupBox Grid.Row="3" Grid.Column="0" Margin="10, 0">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="6"/>
@@ -140,17 +140,17 @@
       </Grid>
     </GroupBox>
     <!-- Notes -->
-    <GroupBox Grid.Row="3" Grid.Column="1">
+    <GroupBox Grid.Row="3" Grid.Column="1" Margin="10, 0">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="2"/>
           <Label Content="Notas"/>
         </StackPanel>
       </GroupBox.Header>
-      <TextBox AcceptsReturn="True" TextWrapping="Wrap"/>
+      <TextBox AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
     </GroupBox>
     <!-- Start button -->
-    <Button Name="newBttn" Grid.Column="1" Grid.Row="4" Width="125"
+    <Button Name="newBttn" Grid.Column="1" Grid.Row="4" Margin="10, 0" Width="125"
     Height="25" HorizontalAlignment="Right" Click="newBttn_Click">Iniciar</Button>
   </Grid>
 </Page>

@@ -20,6 +20,7 @@ namespace Narf.View {
   public partial class OverlayPanel : Grid {
     public OverlayPanel() {
       InitializeComponent();
+      var innerButtons = new Button[10];
     }
   }
 }
