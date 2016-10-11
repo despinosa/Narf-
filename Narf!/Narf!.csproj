@@ -217,11 +217,13 @@
     <Resource Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\NarfDB.db" />
     <None Include="Resources\UIStyles.Overlay.bmp" />
     <Resource Include="Resources\background.jpg" />
     <Resource Include="Resources\offline.png" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Model\DB\" />
     <Folder Include="Test\" />
   </ItemGroup>
   <ItemGroup>
