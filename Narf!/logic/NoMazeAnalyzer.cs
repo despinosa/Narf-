@@ -11,6 +11,13 @@ namespace Narf.Logic {
     public NoMazeAnalyzer(Case case_, Capture[] sources) {
       Case = case_;
       Sources = sources;
+      CurrentFrames = new Mat[Enum.GetValues(typeof(SourceAngle)).Length];
+    }
+
+    public override Mat NextFrameFor(SourceAngle angle) {
+      CurrentFrames[(int)angle]?.Dispose();
+      CurrentFrames[(int)angle] = Sources[(int)angle].QueryFrame();
+      return CurrentFrames[(int)angle];
     }
   }
 }

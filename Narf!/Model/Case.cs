@@ -56,7 +56,7 @@ namespace Narf.Model {
     public Mat Preview { get; set; }
     public string Subject { get; set; }
     public string Substance { get; set; }
-    public string VideoHash { get; set; }
+    public int VideoHash { get; set; }
     public decimal Weight { get; set; }
   }
 }

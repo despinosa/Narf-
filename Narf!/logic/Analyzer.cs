@@ -18,8 +18,13 @@ namespace Narf.Logic {
                                           case_.GetType().ToString());
       }
     }
-    public Capture[] Sources { get; protected set; } = { null, null, null };
+    public Capture[] Sources { get; protected set; }
     public Case Case { get; set; }
-    public Mat CurrentFrame { get; protected set; }
+    public TimeSpan Ellapsed { get; protected set; }
+    public Mat[] CurrentFrames { get; protected set; }
+
+    public abstract Mat NextFrameFor(SourceAngle angle);
+    public void MarkBehaviour(Behaviour behaviour) {
+    }
   }
 }

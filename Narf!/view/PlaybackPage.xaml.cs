@@ -43,9 +43,7 @@ namespace Narf.View {
       Displays[(int)SourceAngle.Aerial] = mainDisplay;
       Displays[(int)SourceAngle.Closed] = leftDisplay;
       Displays[(int)SourceAngle.Open] = rightDisplay;
-      foreach (DispatcherTimer timer in RefreshTimers) {
-        timer.IsEnabled = true;
-      }
+      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
     }
 
     /*
@@ -60,7 +58,7 @@ namespace Narf.View {
     } */
 
     protected void Refresh(dynamic sender, EventArgs args) {
-      var frame =  Analyzer.Sources[(int)sender.Tag].QueryFrame();
+      var frame = Analyzer.NextFrameFor(sender.Tag);
       if (frame == null) {
         sender.IsEnabled = false;
       } else {
