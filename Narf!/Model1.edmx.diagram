@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="854c08cefce746e0999cc682a7767ee7" Name="Diagram1" ZoomLevel="83">
+        <EntityTypeShape EntityType="NarfDBModel.Behaviour" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NarfDBModel.BehaviourEvent" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NarfDBModel.Case" Width="1.5" PointX="3.5" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="NarfDBModel.Pattern" Width="1.5" PointX="0.625" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="NarfDBModel.Position" Width="1.5" PointX="9.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="NarfDBModel.Transition" Width="1.5" PointX="9.5" PointY="6.875" IsExpanded="true" />
+        <AssociationConnector Association="NarfDBModel.FK_BehaviourEvent_1_0" ManuallyRouted="false" />
+        <AssociationConnector Association="NarfDBModel.FK_Pattern_0_0" ManuallyRouted="false" />
+        <AssociationConnector Association="NarfDBModel.FK_BehaviourEvent_0_0" ManuallyRouted="false" />
+        <AssociationConnector Association="NarfDBModel.FK_Position_0_0" ManuallyRouted="false" />
+        <AssociationConnector Association="NarfDBModel.FK_Transition_0_0" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
