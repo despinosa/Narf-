@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Narf!", "Narf!\Narf!.csproj", "{817D0D43-D124-499D-83F1-BCCF2C2C415A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Narf! Tests", "Narf! Tests\Narf! Tests.csproj", "{DAB2C077-91BE-4DEF-99DA-CCEEBD39672D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{817D0D43-D124-499D-83F1-BCCF2C2C415A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{817D0D43-D124-499D-83F1-BCCF2C2C415A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{817D0D43-D124-499D-83F1-BCCF2C2C415A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAB2C077-91BE-4DEF-99DA-CCEEBD39672D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAB2C077-91BE-4DEF-99DA-CCEEBD39672D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAB2C077-91BE-4DEF-99DA-CCEEBD39672D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAB2C077-91BE-4DEF-99DA-CCEEBD39672D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -31,12 +31,12 @@ namespace Narf.View {
         Captures[i] = new Capture(videoPaths[i]);
       }
       InitializeComponent();
-      mazeCombo.ItemsSource = Maze.All;
+      mazeCombo.ItemsSource = Enum.GetValues(typeof(Maze));
     }
 
     private void newBttn_Click(object sender, RoutedEventArgs e) {
       Case = new Case() {
-        Date = new DateTime(2016, 8, 30), Duration = new TimeSpan(0, 5, 8),
+        Date = new DateTime(2016, 8, 30), Duration = new TimeSpan(0, 5, 8).Seconds,
         Substance = "SSRI", Dose = 9M, Subject = "Cerebro", Weight = 231.7M,
         Maze = (Maze) mazeCombo.SelectedItem
       };

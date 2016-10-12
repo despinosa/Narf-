@@ -1,0 +1,421 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Narf.Model.Store" Provider="System.Data.SQLite.EF6" ProviderManifestToken="data source=&quot;d:\documents\Visual Studio 2015\Projects\Narf!\Narf!\Resources\Narf.db&quot;;datetimeformat=Ticks" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Behaviour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BehaviourEvent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="BehaviourId" Type="integer" Nullable="false" />
+          <Property Name="CaseId" Type="integer" Nullable="false" />
+          <Property Name="Time" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Case">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="Maze" Type="integer" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Dose" Type="decimal" Precision="6" Scale="3" />
+          <Property Name="Duration" Type="integer" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="Preview" Type="blob" Nullable="false" />
+          <Property Name="Subject" Type="nvarchar" MaxLength="2147483647" Nullable="false" />
+          <Property Name="Substance" Type="nvarchar" MaxLength="2147483647" />
+          <Property Name="VideoHash" Type="integer" Nullable="false" />
+          <Property Name="Weight" Type="decimal" Precision="6" Scale="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pattern">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="BehaviourId" Type="integer" Nullable="false" />
+          <Property Name="Hash" Type="integer" Nullable="false" />
+          <Property Name="Raw" Type="blob" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="CaseId" Type="integer" Nullable="false" />
+          <Property Name="Time" Type="integer" Nullable="false" />
+          <Property Name="X" Type="integer" Nullable="false" />
+          <Property Name="Y" Type="integer" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="integer" Nullable="false" />
+          <Property Name="CaseId" Type="integer" Nullable="false" />
+          <Property Name="Time" Type="integer" Nullable="false" />
+          <Property Name="From" Type="integer" Nullable="false" />
+          <Property Name="To" Type="integer" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_BehaviourEvent_0_0">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="BehaviourEvent" Type="Self.BehaviourEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BehaviourEvent">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BehaviourEvent_1_0">
+          <End Role="Behaviour" Type="Self.Behaviour" Multiplicity="1" />
+          <End Role="BehaviourEvent" Type="Self.BehaviourEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Behaviour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BehaviourEvent">
+              <PropertyRef Name="BehaviourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pattern_0_0">
+          <End Role="Behaviour" Type="Self.Behaviour" Multiplicity="1" />
+          <End Role="Pattern" Type="Self.Pattern" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Behaviour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Pattern">
+              <PropertyRef Name="BehaviourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Position_0_0">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Position">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transition_0_0">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="Transition" Type="Self.Transition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transition">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NarfModelStoreContainer">
+          <EntitySet Name="Behaviour" EntityType="Self.Behaviour" store:Type="Tables" />
+          <EntitySet Name="BehaviourEvent" EntityType="Self.BehaviourEvent" store:Type="Tables" />
+          <EntitySet Name="Case" EntityType="Self.Case" store:Type="Tables" />
+          <EntitySet Name="Pattern" EntityType="Self.Pattern" store:Type="Tables" />
+          <EntitySet Name="Position" EntityType="Self.Position" store:Type="Tables" />
+          <EntitySet Name="Transition" EntityType="Self.Transition" store:Type="Tables" />
+          <AssociationSet Name="FK_BehaviourEvent_0_0" Association="Self.FK_BehaviourEvent_0_0">
+            <End Role="Case" EntitySet="Case" />
+            <End Role="BehaviourEvent" EntitySet="BehaviourEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BehaviourEvent_1_0" Association="Self.FK_BehaviourEvent_1_0">
+            <End Role="Behaviour" EntitySet="Behaviour" />
+            <End Role="BehaviourEvent" EntitySet="BehaviourEvent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pattern_0_0" Association="Self.FK_Pattern_0_0">
+            <End Role="Behaviour" EntitySet="Behaviour" />
+            <End Role="Pattern" EntitySet="Pattern" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Position_0_0" Association="Self.FK_Position_0_0">
+            <End Role="Case" EntitySet="Case" />
+            <End Role="Position" EntitySet="Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transition_0_0" Association="Self.FK_Transition_0_0">
+            <End Role="Case" EntitySet="Case" />
+            <End Role="Transition" EntitySet="Transition" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Narf.Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Behaviour">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="BehaviourEvents" Relationship="Self.FK_BehaviourEvent_1_0" FromRole="Behaviour" ToRole="BehaviourEvent" />
+          <NavigationProperty Name="Patterns" Relationship="Self.FK_Pattern_0_0" FromRole="Behaviour" ToRole="Pattern" />
+        </EntityType>
+        <EntityType Name="BehaviourEvent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="BehaviourId" Type="Int64" Nullable="false" />
+          <Property Name="CaseId" Type="Int64" Nullable="false" />
+          <Property Name="Time" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Behaviour" Relationship="Self.FK_BehaviourEvent_1_0" FromRole="BehaviourEvent" ToRole="Behaviour" />
+          <NavigationProperty Name="Case" Relationship="Self.FK_BehaviourEvent_0_0" FromRole="BehaviourEvent" ToRole="Case" />
+        </EntityType>
+        <EntityType Name="Case">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Maze" Type="Narf.Model.Maze" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="Dose" Type="Decimal" Precision="6" Scale="3" />
+          <Property Name="Duration" Type="Int64" Nullable="false" />
+          <Property Name="Notes" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="Preview" Type="Binary" MaxLength="2147483647" FixedLength="false" Nullable="false" />
+          <Property Name="Subject" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Substance" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="true" />
+          <Property Name="VideoHash" Type="Int64" Nullable="false" />
+          <Property Name="Weight" Type="Decimal" Precision="6" Scale="3" Nullable="false" />
+          <NavigationProperty Name="BehaviourEvents" Relationship="Self.FK_BehaviourEvent_0_0" FromRole="Case" ToRole="BehaviourEvent" />
+          <NavigationProperty Name="Positions" Relationship="Self.FK_Position_0_0" FromRole="Case" ToRole="Position" />
+          <NavigationProperty Name="Transitions" Relationship="Self.FK_Transition_0_0" FromRole="Case" ToRole="Transition" />
+        </EntityType>
+        <EntityType Name="Pattern">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="BehaviourId" Type="Int64" Nullable="false" />
+          <Property Name="Hash" Type="Int64" Nullable="false" />
+          <Property Name="Raw" Type="Binary" MaxLength="2147483647" FixedLength="false" Nullable="false" />
+          <NavigationProperty Name="Behaviour" Relationship="Self.FK_Pattern_0_0" FromRole="Pattern" ToRole="Behaviour" />
+        </EntityType>
+        <EntityType Name="Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="CaseId" Type="Int64" Nullable="false" />
+          <Property Name="Time" Type="Int64" Nullable="false" />
+          <Property Name="X" Type="Int64" Nullable="false" />
+          <Property Name="Y" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Case" Relationship="Self.FK_Position_0_0" FromRole="Position" ToRole="Case" />
+        </EntityType>
+        <EntityType Name="Transition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="CaseId" Type="Int64" Nullable="false" />
+          <Property Name="Time" Type="Int64" Nullable="false" />
+          <Property Name="From" Type="Int64" Nullable="false" />
+          <Property Name="To" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Case" Relationship="Self.FK_Transition_0_0" FromRole="Transition" ToRole="Case" />
+        </EntityType>
+        <Association Name="FK_BehaviourEvent_1_0">
+          <End Role="Behaviour" Type="Self.Behaviour" Multiplicity="1" />
+          <End Role="BehaviourEvent" Type="Self.BehaviourEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Behaviour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BehaviourEvent">
+              <PropertyRef Name="BehaviourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pattern_0_0">
+          <End Role="Behaviour" Type="Self.Behaviour" Multiplicity="1" />
+          <End Role="Pattern" Type="Self.Pattern" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Behaviour">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Pattern">
+              <PropertyRef Name="BehaviourId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BehaviourEvent_0_0">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="BehaviourEvent" Type="Self.BehaviourEvent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="BehaviourEvent">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Position_0_0">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="Position" Type="Self.Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Position">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Transition_0_0">
+          <End Role="Case" Type="Self.Case" Multiplicity="1" />
+          <End Role="Transition" Type="Self.Transition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Case">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Transition">
+              <PropertyRef Name="CaseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Behaviours" EntityType="Self.Behaviour" />
+          <EntitySet Name="BehaviourEvents" EntityType="Self.BehaviourEvent" />
+          <EntitySet Name="Cases" EntityType="Self.Case" />
+          <EntitySet Name="Patterns" EntityType="Self.Pattern" />
+          <EntitySet Name="Positions" EntityType="Self.Position" />
+          <EntitySet Name="Transitions" EntityType="Self.Transition" />
+          <AssociationSet Name="FK_BehaviourEvent_1_0" Association="Self.FK_BehaviourEvent_1_0">
+            <End Role="Behaviour" EntitySet="Behaviours" />
+            <End Role="BehaviourEvent" EntitySet="BehaviourEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pattern_0_0" Association="Self.FK_Pattern_0_0">
+            <End Role="Behaviour" EntitySet="Behaviours" />
+            <End Role="Pattern" EntitySet="Patterns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BehaviourEvent_0_0" Association="Self.FK_BehaviourEvent_0_0">
+            <End Role="Case" EntitySet="Cases" />
+            <End Role="BehaviourEvent" EntitySet="BehaviourEvents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Position_0_0" Association="Self.FK_Position_0_0">
+            <End Role="Case" EntitySet="Cases" />
+            <End Role="Position" EntitySet="Positions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Transition_0_0" Association="Self.FK_Transition_0_0">
+            <End Role="Case" EntitySet="Cases" />
+            <End Role="Transition" EntitySet="Transitions" />
+          </AssociationSet>
+        </EntityContainer>
+        <EnumType Name="Maze" UnderlyingType="Int64">
+          <Member Name="None" />
+          <Member Name="Cross" />
+        </EnumType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NarfModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Behaviours">
+            <EntityTypeMapping TypeName="Narf.Model.Behaviour">
+              <MappingFragment StoreEntitySet="Behaviour">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BehaviourEvents">
+            <EntityTypeMapping TypeName="Narf.Model.BehaviourEvent">
+              <MappingFragment StoreEntitySet="BehaviourEvent">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BehaviourId" ColumnName="BehaviourId" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cases">
+            <EntityTypeMapping TypeName="Narf.Model.Case">
+              <MappingFragment StoreEntitySet="Case">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Maze" ColumnName="Maze" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Dose" ColumnName="Dose" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Preview" ColumnName="Preview" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Substance" ColumnName="Substance" />
+                <ScalarProperty Name="VideoHash" ColumnName="VideoHash" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patterns">
+            <EntityTypeMapping TypeName="Narf.Model.Pattern">
+              <MappingFragment StoreEntitySet="Pattern">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="BehaviourId" ColumnName="BehaviourId" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Raw" ColumnName="Raw" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Positions">
+            <EntityTypeMapping TypeName="Narf.Model.Position">
+              <MappingFragment StoreEntitySet="Position">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="X" ColumnName="X" />
+                <ScalarProperty Name="Y" ColumnName="Y" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transitions">
+            <EntityTypeMapping TypeName="Narf.Model.Transition">
+              <MappingFragment StoreEntitySet="Transition">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="From" ColumnName="From" />
+                <ScalarProperty Name="To" ColumnName="To" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

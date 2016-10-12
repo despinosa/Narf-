@@ -12,33 +12,21 @@ namespace Narf.Model
     using System;
     using System.Collections.Generic;
     
-    public partial class Case
+    public partial class Behaviour
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Case()
+        public Behaviour()
         {
             this.BehaviourEvents = new HashSet<BehaviourEvent>();
-            this.Positions = new HashSet<Position>();
-            this.Transitions = new HashSet<Transition>();
+            this.Patterns = new HashSet<Pattern>();
         }
     
         public long Id { get; set; }
-        public Maze Maze { get; set; }
-        public System.DateTime Date { get; set; }
-        public Nullable<decimal> Dose { get; set; }
-        public long Duration { get; set; }
-        public string Notes { get; set; }
-        public byte[] Preview { get; set; }
-        public string Subject { get; set; }
-        public string Substance { get; set; }
-        public long VideoHash { get; set; }
-        public decimal Weight { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BehaviourEvent> BehaviourEvents { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Position> Positions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Transition> Transitions { get; set; }
+        public virtual ICollection<Pattern> Patterns { get; set; }
     }
 }

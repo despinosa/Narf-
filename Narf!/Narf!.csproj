@@ -86,6 +86,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -145,8 +147,43 @@
     <Compile Include="Logic\Analyzer.cs" />
     <Compile Include="Logic\NoMazeAnalyzer.cs" />
     <Compile Include="Logic\XMazeAnalyzer.cs" />
-    <Compile Include="Model\Behaviour.cs" />
-    <Compile Include="Model\Case.cs" />
+    <Compile Include="Model\Behaviour.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\BehaviourEvent.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Case.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Generated.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Generated.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Generated.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Generated.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Maze.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Pattern.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Position.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Transition.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\_old\Case.cs" />
     <Compile Include="View\OverlayPanel.xaml.cs">
       <DependentUpon>OverlayPanel.xaml</DependentUpon>
     </Compile>
@@ -202,6 +239,13 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="ClassDiagram1.cd" />
+    <EntityDeploy Include="Model\Generated.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Generated.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model\Generated.edmx.diagram">
+      <DependentUpon>Generated.edmx</DependentUpon>
+    </None>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -218,19 +262,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\NarfDB.db" />
-    <None Include="Resources\UIStyles.Overlay.bmp" />
     <Resource Include="Resources\background.jpg" />
     <Resource Include="Resources\offline.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\DB\" />
-    <Folder Include="Test\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="License-LGPL.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Model\Generated.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Generated.edmx</DependentUpon>
+      <LastGenOutput>Generated.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\Generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Generated.edmx</DependentUpon>
+      <LastGenOutput>Generated.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
