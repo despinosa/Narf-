@@ -183,6 +183,9 @@
     <Compile Include="Model\Transition.cs">
       <DependentUpon>Generated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\Zone.cs">
+      <DependentUpon>Generated.tt</DependentUpon>
+    </Compile>
     <Compile Include="Model\_old\Case.cs" />
     <Compile Include="View\OverlayPanel.xaml.cs">
       <DependentUpon>OverlayPanel.xaml</DependentUpon>
@@ -265,7 +268,6 @@
     <Resource Include="Resources\background.jpg" />
     <Resource Include="Resources\offline.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

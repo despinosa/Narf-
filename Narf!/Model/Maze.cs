@@ -11,9 +11,9 @@ namespace Narf.Model
 {
     using System;
     
-    public enum Maze : long
+    public enum Maze : byte
     {
         None = 0,
-        Cross = 1
+        Plus = 1
     }
 }

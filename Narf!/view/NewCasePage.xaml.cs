@@ -36,7 +36,7 @@ namespace Narf.View {
 
     private void newBttn_Click(object sender, RoutedEventArgs e) {
       Case = new Case() {
-        Date = new DateTime(2016, 8, 30), Duration = new TimeSpan(0, 5, 8).Seconds,
+        Date = new DateTime(2016, 8, 30), Duration = (short)new TimeSpan(0, 5, 8).TotalSeconds,
         Substance = "SSRI", Dose = 9M, Subject = "Cerebro", Weight = 231.7M,
         Maze = (Maze) mazeCombo.SelectedItem
       };

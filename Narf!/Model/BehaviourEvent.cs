@@ -14,10 +14,8 @@ namespace Narf.Model
     
     public partial class BehaviourEvent
     {
-        public long Id { get; set; }
-        public long BehaviourId { get; set; }
-        public long CaseId { get; set; }
-        public long Time { get; set; }
+        public int Id { get; set; }
+        public short Time { get; set; }
     
         public virtual Behaviour Behaviour { get; set; }
         public virtual Case Case { get; set; }

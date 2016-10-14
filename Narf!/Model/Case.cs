@@ -22,11 +22,11 @@ namespace Narf.Model
             this.Transitions = new HashSet<Transition>();
         }
     
-        public long Id { get; set; }
+        public int Id { get; set; }
         public Maze Maze { get; set; }
         public System.DateTime Date { get; set; }
         public Nullable<decimal> Dose { get; set; }
-        public long Duration { get; set; }
+        public short Duration { get; set; }
         public string Notes { get; set; }
         public byte[] Preview { get; set; }
         public string Subject { get; set; }

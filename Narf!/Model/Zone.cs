@@ -10,14 +10,13 @@
 namespace Narf.Model
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Pattern
+    public enum Zone : byte
     {
-        public int Id { get; set; }
-        public long Hash { get; set; }
-        public byte[] Raw { get; set; }
-    
-        public virtual Behaviour Behaviour { get; set; }
+        Center = 1,
+        OpenA = 4,
+        OpenB = 6,
+        ClosedA = 8,
+        ClosedB = 10
     }
 }

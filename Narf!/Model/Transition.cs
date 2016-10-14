@@ -14,11 +14,10 @@ namespace Narf.Model
     
     public partial class Transition
     {
-        public long Id { get; set; }
-        public long CaseId { get; set; }
-        public long Time { get; set; }
-        public long From { get; set; }
-        public long To { get; set; }
+        public int Id { get; set; }
+        public int Time { get; set; }
+        public Zone From { get; set; }
+        public Zone To { get; set; }
     
         public virtual Case Case { get; set; }
     }

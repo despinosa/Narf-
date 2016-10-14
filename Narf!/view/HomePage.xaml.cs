@@ -40,29 +40,29 @@ namespace Narf.View {
 
       Cases = new List<Case>();
       Cases.Add(new Case() {
-        Date = new DateTime(2016, 10, 12), Duration = (long)new TimeSpan(0, 4, 46).TotalSeconds,
+        Date = new DateTime(2016, 10, 12), Duration = (short)new TimeSpan(0, 4, 46).TotalSeconds,
         Substance = "SSRI", Dose = 5M, Subject = "Pinky", Weight = 228.7M,
         Maze = Maze.None
       });
       Cases.Add(new Case() {
-        Date = new DateTime(2016, 7, 17), Duration = (long)new TimeSpan(0, 4, 53).TotalSeconds,
+        Date = new DateTime(2016, 7, 17), Duration = (short)new TimeSpan(0, 4, 53).TotalSeconds,
         Substance = "SNDRA", Dose = 12M, Subject = "Pinky", Weight = 246.9M,
-        Maze = Maze.Cross
+        Maze = Maze.Plus
       });
       Cases.Add(new Case() {
-        Date = new DateTime(2016, 10, 3), Duration = (long)new TimeSpan(0, 5, 12).TotalSeconds,
+        Date = new DateTime(2016, 10, 3), Duration = (short)new TimeSpan(0, 5, 12).TotalSeconds,
         Substance = "THC", Dose = 10M, Subject = "Cerebro", Weight = 242.4M,
         Maze = Maze.None
       });
       Cases.Add(new Case() {
-        Date = new DateTime(2016, 8, 30), Duration = (long)new TimeSpan(0, 5, 8).TotalSeconds,
+        Date = new DateTime(2016, 8, 30), Duration = (short)new TimeSpan(0, 5, 8).TotalSeconds,
         Substance = "SSRI", Dose = 9M, Subject = "Cerebro", Weight = 231.7M,
-        Maze = Maze.Cross
+        Maze = Maze.Plus
       });
       Cases.Add(new Case() {
-        Date = new DateTime(2016, 9, 22), Duration = (long)new TimeSpan(0, 5, 3).TotalSeconds,
+        Date = new DateTime(2016, 9, 22), Duration = (short)new TimeSpan(0, 5, 3).TotalSeconds,
         Substance = "SNDRA", Dose = 7M, Subject = "Pinky", Weight = 266.4M,
-        Maze = Maze.Cross
+        Maze = Maze.Plus
       });
       casesList.ItemsSource = Cases;
     }

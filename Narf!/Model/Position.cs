@@ -14,11 +14,10 @@ namespace Narf.Model
     
     public partial class Position
     {
-        public long Id { get; set; }
-        public long CaseId { get; set; }
-        public long Time { get; set; }
-        public long X { get; set; }
-        public long Y { get; set; }
+        public int Id { get; set; }
+        public int Time { get; set; }
+        public short X { get; set; }
+        public short Y { get; set; }
     
         public virtual Case Case { get; set; }
     }
