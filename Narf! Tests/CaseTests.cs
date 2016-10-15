@@ -25,8 +25,8 @@ namespace Narf.Model.Test {
       using (var context = new Entities()) {
         var after = context.Cases.ToArray();
         Case new_ = after.First( c => ! before.Contains(c) );
-        case_.Id = new_.Id;
-        Assert.AreEqual(new_, case_);
+        //case_.Id = new_.Id;
+        Assert.AreEqual(new_.Id, case_.Id);
       }
     }
     [TestMethod()]
