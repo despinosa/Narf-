@@ -17,7 +17,7 @@ namespace Narf.View {
   /// <summary>
   /// Lógica de interacción para OverlayCanvas.xaml
   /// </summary>
-  public partial class OverlayPanel : Grid {
+  partial class OverlayPanel : Grid {
     public OverlayPanel() {
       InitializeComponent();
       var innerButtons = new Button[10];

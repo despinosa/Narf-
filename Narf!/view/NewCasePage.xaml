@@ -4,42 +4,55 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Narf.View"
+      xmlns:model="clr-namespace:Narf.Model"
+      xmlns:prop="clr-namespace:Narf.Properties"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:ext="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
       xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="555" d:DesignWidth="635"
+      d:DesignHeight="600" d:DesignWidth="765"
       Title="Nuevo caso de estudio">
-
-  <Grid Margin="10" Height="535" Width="615">
+  <Page.Resources>
+    <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                        ObjectType="{x:Type sys:Enum}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="model:Maze"/>
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </Page.Resources>
+  <Grid Margin="10" Height="580" Width="745">
     <Grid.ColumnDefinitions>
       <ColumnDefinition/>
       <ColumnDefinition/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="30"/>
-      <RowDefinition Height="290"/>
+      <RowDefinition Height="40"/>
+      <RowDefinition Height="295"/>
+      <!-- video -->
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="30"/>
     </Grid.RowDefinitions>
     <!-- Header -->
-    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="#0066cc" Content="Nuevo caso de estudio"/>
+    <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" Content="Nuevo caso de estudio"/>
     <!-- Maze chooser -->
-    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeCombo" Margin="10, 0" FontSize="16" HorizontalContentAlignment="Right">
-      <ComboBox.ItemTemplate>
+    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeCombo" Margin="5" Width="
+              187.5" FontSize="16" HorizontalContentAlignment="Right" HorizontalAlignment="Right" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"/>
+    <!-- ComboBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
             <Rectangle Fill="{Binding Name}" />
             <TextBlock Text="{Binding Name}" />
           </StackPanel>
         </DataTemplate>
-      </ComboBox.ItemTemplate>
-    </ComboBox>
+      </>
+    </ComboBox -->
     <!-- Previews -->
     <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
       <Grid.ColumnDefinitions>
         <ColumnDefinition/>
-        <ColumnDefinition Width="485"/>
+        <ColumnDefinition Width="550"/>
+        <!-- video -->
         <ColumnDefinition/>
       </Grid.ColumnDefinitions>
       <Button Grid.Column="0" Height="50" Width="50" FontFamily="Webdings" FontSize="32" Content="3">
@@ -53,12 +66,13 @@
         </Button.Template>
       </Button>
 
-      <WindowsFormsHost Grid.Column="1" Margin="10" Width="465" Height="270">
-        <emgu:ImageBox x:Name="previewDisplay"  Width="465" Height="270"/>
-      </WindowsFormsHost>
-      <Button Grid.Column="1" Margin="100" HorizontalAlignment="Left" FontFamily="Wingdings" FontSize="48" Content="o" Background="{x:Null}"/>
-      <Button Grid.Column="1" Margin="100" HorizontalAlignment="Center" FontFamily="Webdings" FontSize="48" Content="k" Background="{x:Null}"/>
-      <Button Grid.Column="1" Margin="100" HorizontalAlignment="Right" FontFamily="Wingdings" FontSize="48" Content="n" Background="{x:Null}"/>
+      <Image Grid.Column="1" Width="550" Height="285" Margin="0,5" Source="/Resources/offline.png"/>
+      <!-- WindowsFormsHost Grid.Column="1" Width="550" Height="285" Margin="0,5">
+        <emgu:ImageBox x:Name="previewDisplay"  Width="550" Height="285"/>
+      </WindowsFormsHost -->
+      <Button Grid.Column="1" Margin="100" HorizontalAlignment="Left" FontFamily="Wingdings" FontSize="48" Content="o" BorderBrush="{x:Null}" Background="{x:Null}"/>
+      <Button Grid.Column="1" Margin="100" HorizontalAlignment="Center" FontFamily="Webdings" FontSize="48" Content="k" Background="{x:Null}" BorderBrush="{x:Null}"/>
+      <Button Grid.Column="1" Margin="100" HorizontalAlignment="Right" FontFamily="Wingdings" FontSize="48" Content="n" Background="{x:Null}" BorderBrush="{x:Null}"/>
       <Button Grid.Column="2" Height="50" Width="50" FontFamily="Webdings" FontSize="32" Content="4">
         <Button.Template>
           <ControlTemplate TargetType="Button">
@@ -71,7 +85,7 @@
       </Button>
     </Grid>
     <!-- Substance & Dose -->
-    <GroupBox Grid.Row="2" Grid.Column="0" Margin="10, 0">
+    <GroupBox Grid.Row="2" Grid.Column="0" Margin="5" Padding="5">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="S"/>
@@ -94,7 +108,7 @@
       </Grid>
     </GroupBox>
     <!-- Subject & Weight -->
-    <GroupBox Grid.Row="2" Grid.Column="1" Margin="10, 0">
+    <GroupBox Grid.Row="2" Grid.Column="1" Margin="5" Padding="5">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="8"/>
@@ -117,7 +131,7 @@
       </Grid>
     </GroupBox>
     <!-- Date & Duration -->
-    <GroupBox Grid.Row="3" Grid.Column="0" Margin="10, 0">
+    <GroupBox Grid.Row="3" Grid.Column="0" Margin="5" Padding="5">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="6"/>
@@ -140,7 +154,7 @@
       </Grid>
     </GroupBox>
     <!-- Notes -->
-    <GroupBox Grid.Row="3" Grid.Column="1" Margin="10, 0">
+    <GroupBox Grid.Row="3" Grid.Column="1" Margin="5" Padding="5">
       <GroupBox.Header>
         <StackPanel Orientation="Horizontal">
           <Label FontFamily="Wingdings" FontSize="17" Content="2"/>

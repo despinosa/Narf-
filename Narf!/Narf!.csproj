@@ -98,6 +98,14 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TimelineExLib, Version=2.0.2.41912, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Timeline.2.0.2.41912\lib\net40\TimelineExLib.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="TimelineLibrary, Version=2.0.2.41912, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Timeline.2.0.2.41912\lib\net40\TimelineLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -256,6 +264,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Resources\Narf.db" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -264,7 +273,6 @@
     <Resource Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\NarfDB.db" />
     <Resource Include="Resources\background.jpg" />
     <Resource Include="Resources\offline.png" />
   </ItemGroup>

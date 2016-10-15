@@ -19,17 +19,19 @@ namespace Narf.View {
   /// <summary>
   /// Lógica de interacción para NewCasePage.xaml
   /// </summary>
-  public partial class NewCasePage : Page {
-    public Capture[] Captures { get; protected set; }
-    public Case Case { get; protected set; }
-    public PlaybackPage PlaybackPage { get; protected set; }
+  partial class NewCasePage : Page {
+    Capture[] Captures { get; set; }
+    Case Case { get; set; }
+    PlaybackPage PlaybackPage { get; set; }
+    Entities Session { get; }
 
 
-    public NewCasePage(string[] videoPaths) {
+    public NewCasePage(string[] videoPaths, Entities session) {
       Captures = new Capture[videoPaths.Length];
       for (int i = 0; i < videoPaths.Length; i++) {
         Captures[i] = new Capture(videoPaths[i]);
       }
+      Session = session;
       InitializeComponent();
       mazeCombo.ItemsSource = Enum.GetValues(typeof(Maze));
     }
