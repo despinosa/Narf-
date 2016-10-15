@@ -6,27 +6,27 @@
       xmlns:local="clr-namespace:Narf"
       xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="555" d:DesignWidth="635"
+      d:DesignHeight="600" d:DesignWidth="765"
       Title="Narf! - Análisis de video" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
 
   <Grid Margin="5" Initialized="Grid_Initialized">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="312.5"/>
-      <ColumnDefinition Width="312.5"/>
+      <ColumnDefinition Width="382.5"/>
+      <ColumnDefinition Width="382.5"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
-      <RowDefinition Height="365"/>
-      <RowDefinition Height="180"/>
+      <RowDefinition Height="395"/>
+      <RowDefinition Height="195"/>
     </Grid.RowDefinitions>
-    <Image Grid.Column="0" Grid.Row="0" Height="360" Width="620" Margin="0, 0, 0, 5" Grid.ColumnSpan="2" Name="mainDisplay"/>
+    <Image Grid.Column="0" Grid.Row="0" Height="390" Width="755" Margin="0, 0, 0, 5" Grid.ColumnSpan="2" Name="mainDisplay"/>
     <!-- WindowsFormsHost Grid.Column="0" Grid.Row="0" Margin="0, 0, 0, 5" Grid.ColumnSpan="2">
       <emgu:ImageBox x:Name="mainDisplay" SizeMode="AutoSize"/>
     </WindowsFormsHost -->
-    <Image Grid.Column="0" Grid.Row="1" Height="180" Width="310" HorizontalAlignment="Left" Name="leftDisplay"/>
+    <Image Grid.Column="0" Grid.Row="1" Height="195" Width="377.5" HorizontalAlignment="Left" Name="leftDisplay"/>
     <!-- WindowsFormsHost Grid.Column="0" Grid.Row="1" Margin="0, 0, 2.5, 0">
       <emgu:ImageBox x:Name="leftDisplay" SizeMode="AutoSize"/>
     </WindowsFormsHost -->
-    <Image Grid.Column="1" Grid.Row="1" Height="180" Width="310" HorizontalAlignment="Right" Name="rightDisplay"/>
+    <Image Grid.Column="1" Grid.Row="1" Height="195" Width="377.5" HorizontalAlignment="Right" Name="rightDisplay"/>
     <!-- WindowsFormsHost Grid.Column="1" Grid.Row="1" Margin="2.5, 0, 0, 0">
       <emgu:ImageBox x:Name="rightDisplay" SizeMode="AutoSize"/>
     </WindowsFormsHost -->

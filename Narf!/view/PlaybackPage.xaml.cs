@@ -27,13 +27,13 @@ namespace Narf.View {
   /// <summary>
   /// Lógica de interacción para PlaybackPage.xaml
   /// </summary>
-  public partial class PlaybackPage : Page {
-    private int AngleRefreshFlag { get; set; } = 0;
-    private CancellationToken Token { get; set; } = CancellationToken.None;
-    private DispatcherTimer[] RefreshTimers { get; set; }
-    public Analyzer Analyzer { get; }
-    public Image[] Displays { get; }
-    public OverlayPanel OverlayPanel { get; protected set; }
+  partial class PlaybackPage : Page {
+    int AngleRefreshFlag { get; set; } = 0;
+    CancellationToken Token { get; set; } = CancellationToken.None;
+    DispatcherTimer[] RefreshTimers { get; set; }
+    Analyzer Analyzer { get; }
+    Image[] Displays { get; }
+    OverlayPanel OverlayPanel { get; set; }
 
     public PlaybackPage(Case case_, Capture[] captures) {
       Analyzer = Analyzer.ForCase(case_, captures);
@@ -57,7 +57,7 @@ namespace Narf.View {
       }
     } */
 
-    protected void Refresh(dynamic sender, EventArgs args) {
+    void Refresh(dynamic sender, EventArgs args) {
       var frame = Analyzer.NextFrameFor(sender.Tag);
       if (frame == null) {
         sender.IsEnabled = false;
@@ -67,7 +67,7 @@ namespace Narf.View {
       }
     }
 
-    private void Grid_Initialized(object sender, EventArgs e) {
+    void Grid_Initialized(object sender, EventArgs e) {
       foreach (SourceAngle angle in Enum.GetValues(typeof(SourceAngle))) {
         if (Analyzer.Sources[(int)angle] != null) {
           double fps = Analyzer.Sources[(int)angle].

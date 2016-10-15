@@ -15,59 +15,38 @@ namespace Narf.View {
   /// <summary>
   /// Lógica de interacción para HomePage.xaml
   /// </summary>
-  public partial class HomePage : Page {
-    public List<Case> Cases { get; protected set; }
-    public NewCasePage NewCasePage { get; protected set; }
-
+  partial class HomePage : Page {
+    ICollection<Case> Cases { get; set; }
+    NewCasePage NewCasePage { get; set; }
+    Entities Session { get; }
 
     public HomePage() {
       InitializeComponent();
-      testInit();
 
+      Session = new Entities();
+      RefreshCases();
+    }
+
+    void RefreshCases() {
+      Cases = new HashSet<Case>(Session.Cases);
+      casesList.ItemsSource = Cases;
       var view = (CollectionView)CollectionViewSource.
           GetDefaultView(casesList.ItemsSource);
       var description = new PropertyGroupDescription("Maze");
       view.GroupDescriptions.Add(description);
+      casesList.ItemsSource = Cases;
     }
 
-    private void testInit() {
+    void testInit() {
       var image = new Mat(270, 465, DepthType.Cv8U, 3);
       image.SetTo(new Bgr(111, 111, 111).MCvScalar);
       CvInvoke.PutText(image, "Preview", new System.Drawing.Point(10, 50),
                        FontFace.HersheyPlain, 3.0,
                        new Bgr(255.0, 0.0, 0.0).MCvScalar);
       previewDisplay.Image = image;
-
-      Cases = new List<Case>();
-      Cases.Add(new Case() {
-        Date = new DateTime(2016, 10, 12), Duration = (short)new TimeSpan(0, 4, 46).TotalSeconds,
-        Substance = "SSRI", Dose = 5M, Subject = "Pinky", Weight = 228.7M,
-        Maze = Maze.None
-      });
-      Cases.Add(new Case() {
-        Date = new DateTime(2016, 7, 17), Duration = (short)new TimeSpan(0, 4, 53).TotalSeconds,
-        Substance = "SNDRA", Dose = 12M, Subject = "Pinky", Weight = 246.9M,
-        Maze = Maze.Plus
-      });
-      Cases.Add(new Case() {
-        Date = new DateTime(2016, 10, 3), Duration = (short)new TimeSpan(0, 5, 12).TotalSeconds,
-        Substance = "THC", Dose = 10M, Subject = "Cerebro", Weight = 242.4M,
-        Maze = Maze.None
-      });
-      Cases.Add(new Case() {
-        Date = new DateTime(2016, 8, 30), Duration = (short)new TimeSpan(0, 5, 8).TotalSeconds,
-        Substance = "SSRI", Dose = 9M, Subject = "Cerebro", Weight = 231.7M,
-        Maze = Maze.Plus
-      });
-      Cases.Add(new Case() {
-        Date = new DateTime(2016, 9, 22), Duration = (short)new TimeSpan(0, 5, 3).TotalSeconds,
-        Substance = "SNDRA", Dose = 7M, Subject = "Pinky", Weight = 266.4M,
-        Maze = Maze.Plus
-      });
-      casesList.ItemsSource = Cases;
     }
 
-    private void newCaseBttn_Click(object sender, RoutedEventArgs args) {
+    void newCaseBttn_Click(object sender, RoutedEventArgs args) {
       var fileDialog = new OpenFileDialog();
       fileDialog.Multiselect = true;
       fileDialog.DefaultExt = ".avi";
@@ -75,16 +54,22 @@ namespace Narf.View {
         "Archivos MP4 (*.mp4)|*.mp4";
       bool? result = fileDialog.ShowDialog();
       if (result == true) {
-        NewCasePage = new NewCasePage(fileDialog.FileNames);
+        Session.SaveChanges();
+        NewCasePage = new NewCasePage(fileDialog.FileNames, Session);
         NavigationService.Navigate(NewCasePage);
       }
     }
 
-    private void delCaseBttn_Click(object sender, RoutedEventArgs e) {
+    void delCaseBttn_Click(object sender, RoutedEventArgs args) {
       var result = MessageBox.Show("¿Eliminar caso de estudio?",
                                    "Eliminar caso", MessageBoxButton.YesNo,
                                    MessageBoxImage.Exclamation);
       if (result == MessageBoxResult.Yes) {
+        foreach (var selected in casesList.SelectedItems) {
+          Session.Cases.Remove((Case)selected);
+        }
+        Session.SaveChanges();
+        RefreshCases();
       }
     }
   }
