@@ -19,7 +19,7 @@ namespace Narf.Model.Test {
       };
       var case2_ = new Case() {
         Date = new DateTime(2016, 7, 18), Duration = (short)new TimeSpan(0, 4, 53).TotalSeconds,
-        Substance = "SRA", Dose = 12M, Subject = "Rat", Weight = 246.1M,
+        Substance = "SRA", Dose = 10M, Subject = "Rat", Weight = 246.1M,
         Maze = Maze.Plus, Preview = new byte[10], VideoHash = rnd.Next()
       };
 
@@ -35,7 +35,7 @@ namespace Narf.Model.Test {
         var after = context.Cases.ToArray();
         Case new_ = after.First( c => ! before.Contains(c) );
         case1_.Id = new_.Id;
-        Assert.AreEqual(new_.Substance, case1_.Substance);
+        Assert.AreEqual(new_.Id, case1_.Id);
       }
     }
     [TestMethod()]
