@@ -13,8 +13,8 @@ namespace Narf.Logic {
     public static Analyzer ForCase(Case case_, Capture[] sources) {
       switch (case_.Maze) {
         case Maze.None:
-          return (Analyzer)new NoMazeAnalyzer(case_, sources);
-        case Maze.Plus:
+          return new NoMazeAnalyzer(case_, sources);
+        case Maze.Plus: // TO DO
         default:
           throw new NotImplementedException("No Analyzer for " +
                                             case_.Maze.ToString());
@@ -22,11 +22,15 @@ namespace Narf.Logic {
     }
     public Capture[] Sources { get; protected set; }
     public Case Case { get; protected set; }
-    protected TimeSpan Ellapsed { get; set; }
-    protected Mat[] CurrentFrames { get; set; }
+    public TimeSpan Ellapsed { get; set; }
+    public Mat[] CurrentFrames { get; set; }
 
     public abstract Mat NextFrameFor(SourceAngle angle);
-    public void MarkBehaviour(Behaviour behaviour) {
+    public void BehaviourTriggered(Behaviour behaviour) {
+      var event_ = new BehaviourEvent() {
+        Case = Case, Behaviour = behaviour, Time = (short)Ellapsed.TotalSeconds
+      };
+      Case.BehaviourEvents.Add(event_);
     }
   }
 }

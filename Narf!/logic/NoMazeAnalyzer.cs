@@ -12,6 +12,7 @@ namespace Narf.Logic {
       Case = case_;
       Sources = sources;
       CurrentFrames = new Mat[Enum.GetValues(typeof(SourceAngle)).Length];
+      Ellapsed = new TimeSpan(0);
     }
 
     public override Mat NextFrameFor(SourceAngle angle) {

@@ -31,7 +31,7 @@ namespace Narf.View {
     int AngleRefreshFlag { get; set; } = 0;
     CancellationToken Token { get; set; } = CancellationToken.None;
     DispatcherTimer[] RefreshTimers { get; set; }
-    Analyzer Analyzer { get; }
+    internal Analyzer Analyzer { get; }
     Image[] Displays { get; }
     OverlayPanel OverlayPanel { get; set; }
 

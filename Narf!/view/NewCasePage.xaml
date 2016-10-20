@@ -36,8 +36,7 @@
     <!-- Header -->
     <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" Content="Nuevo caso de estudio"/>
     <!-- Maze chooser -->
-    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeCombo" Margin="5" Width="
-              187.5" FontSize="16" HorizontalContentAlignment="Right" HorizontalAlignment="Right" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"/>
+    <ComboBox Grid.Row="0" Grid.Column="1" Name="mazeCombo" Margin="5" Width="187.5" FontSize="16" HorizontalContentAlignment="Right" HorizontalAlignment="Right" ItemsSource="{Binding Source={StaticResource dataFromEnum}}"/>
     <!-- ComboBox.ItemTemplate>
         <DataTemplate>
           <StackPanel Orientation="Horizontal">
