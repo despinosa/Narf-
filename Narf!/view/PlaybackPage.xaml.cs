@@ -28,22 +28,28 @@ namespace Narf.View {
   /// Lógica de interacción para PlaybackPage.xaml
   /// </summary>
   partial class PlaybackPage : Page {
-    int AngleRefreshFlag { get; set; } = 0;
-    CancellationToken Token { get; set; } = CancellationToken.None;
-    DispatcherTimer[] RefreshTimers { get; set; }
+    int angleFinshedFlag = 0;
     internal Analyzer Analyzer { get; }
+    CancellationToken Token { get; set; } = CancellationToken.None;
+    DispatcherTimer FinishedTimer { get; }
+    DispatcherTimer[] RefreshTimers { get; }
+    Entities Session { get; }
     Image[] Displays { get; }
-    OverlayPanel OverlayPanel { get; set; }
+    OverlayPanel OverlayPanel { get; }
 
-    public PlaybackPage(Case case_, Capture[] captures) {
+    public PlaybackPage(Entities session, Case case_, Capture[] captures) {
+      Session = session;
       Analyzer = Analyzer.ForCase(case_, captures);
-      RefreshTimers  = new DispatcherTimer[3];
+      RefreshTimers = new DispatcherTimer[3];
+      FinishedTimer = new DispatcherTimer();
       Displays = new Image[3];
+      OverlayPanel = new OverlayPanel(Session, this);
       InitializeComponent();
       Displays[(int)SourceAngle.Aerial] = mainDisplay;
       Displays[(int)SourceAngle.Closed] = leftDisplay;
       Displays[(int)SourceAngle.Open] = rightDisplay;
       foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
+      FinishedTimer.IsEnabled = true;
     }
 
     /*
@@ -61,6 +67,7 @@ namespace Narf.View {
       var frame = Analyzer.NextFrameFor(sender.Tag);
       if (frame == null) {
         sender.IsEnabled = false;
+        angleFinshedFlag += 1 << (int)sender.Tag;
       } else {
         Displays[(int)sender.Tag].Source = BitmapSourceConvert.
           ToBitmapSource(frame);
@@ -68,16 +75,28 @@ namespace Narf.View {
     }
 
     void Grid_Initialized(object sender, EventArgs e) {
+      var max_interval = double.MaxValue;
       foreach (SourceAngle angle in Enum.GetValues(typeof(SourceAngle))) {
         if (Analyzer.Sources[(int)angle] != null) {
-          double fps = Analyzer.Sources[(int)angle].
+          double interval = 1 / Analyzer.Sources[(int)angle].
             GetCaptureProperty(CapProp.Fps);
+          max_interval = Math.Max(max_interval, interval);
           RefreshTimers[(int)angle] = new DispatcherTimer() {
-            Interval = TimeSpan.FromSeconds(1 / fps), Tag = angle
+            Interval = TimeSpan.FromSeconds(interval), Tag = angle
           };
           RefreshTimers[(int)angle].Tick += Refresh;
         }
       }
+    }
+
+    void DockPanel_MouseEnter(object sender, MouseEventArgs e) {
+      hiddenPanel.Visibility = Visibility.Visible;
+    }
+
+    void Button_Click(object sender, RoutedEventArgs e) {
+      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = false;
+      Session.SaveChangesAsync();
+      hiddenPanel.Visibility = Visibility.Collapsed;
     }
   }
 }

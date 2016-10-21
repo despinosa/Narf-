@@ -30,5 +30,17 @@
     <!-- WindowsFormsHost Grid.Column="1" Grid.Row="1" Margin="2.5, 0, 0, 0">
       <emgu:ImageBox x:Name="rightDisplay" SizeMode="AutoSize"/>
     </WindowsFormsHost -->
+    <DockPanel Panel.ZIndex="1000" Name="hiddenPanel" Height="600" Width="765" Visibility="Collapsed" MouseEnter="DockPanel_MouseEnter" OpacityMask="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}">
+      <Button Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content=";" Click="Button_Click">
+        <Button.Template>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+              <Ellipse Stroke="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" StrokeThickness="10"/>
+              <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+          </ControlTemplate>
+        </Button.Template>
+      </Button>
+    </DockPanel>
   </Grid>
 </Page>
