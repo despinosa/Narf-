@@ -27,6 +27,7 @@
     <!-- Header -->
     <Label Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Content="Asistente para análisis ansiolítico en roedores" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/>
     <!-- Preview -->
+    <!-- Image Name="previewDisplay" Grid.Column="0" Grid.Row="1" Width="550" Height="285" Margin="0, 5" Grid.ColumnSpan="2"/ -->
     <WindowsFormsHost Grid.Column="0" Grid.Row="1" Width="550" Height="285" Margin="0, 5" Grid.ColumnSpan="2">
       <emgu:ImageBox x:Name="previewDisplay" Width="550" Height="285"/>
     </WindowsFormsHost>
@@ -36,7 +37,7 @@
     </Border>
     
     <!-- List -->
-    <ListView Name="casesList" Grid.Column="0" Grid.Row="3" Grid.RowSpan="4" Margin="5, 0" Height="208" Width="440" HorizontalAlignment="Right" ItemsSource="{Binding Cases}" SelectionMode="Single" >
+    <ListView Name="casesList" Grid.Column="0" Grid.Row="3" Grid.RowSpan="4" Margin="5, 0" Height="208" Width="440" HorizontalAlignment="Right" ItemsSource="{Binding Cases}" SelectionMode="Single" SelectionChanged="casesList_SelectionChanged">
       <ListView.View>
         <GridView>
           <GridViewColumn Header="Sustancia" DisplayMemberBinding="{Binding Substance}" />

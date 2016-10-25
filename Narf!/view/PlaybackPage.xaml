@@ -7,9 +7,9 @@
       xmlns:emgu="clr-namespace:Emgu.CV.UI;assembly=Emgu.CV.UI"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="765"
-      Title="Narf! - Análisis de video" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}">
+      Title="Narf! - Análisis de video" Background="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" MouseEnter="Panel_MouseEnter" MouseLeave="Panel_MouseLeave">
 
-  <Grid Margin="5" Initialized="Grid_Initialized">
+  <Grid Name="_mainPanel" Margin="5" Initialized="Grid_Initialized" >
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="382.5"/>
       <ColumnDefinition Width="382.5"/>
@@ -18,6 +18,21 @@
       <RowDefinition Height="395"/>
       <RowDefinition Height="195"/>
     </Grid.RowDefinitions>
+    <DockPanel Grid.ColumnSpan="2" Grid.RowSpan="2" Panel.ZIndex="1000" Name="_hiddenPanel" Height="600" Width="765" Visibility="Collapsed">
+      <DockPanel.Background>
+        <SolidColorBrush  Opacity="0.5" Color="{DynamicResource {x:Static SystemColors.DesktopColorKey}}"/>
+      </DockPanel.Background>
+      <Button Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content=";" Click="Pause_Click" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
+        <Button.Template>
+          <ControlTemplate TargetType="Button">
+            <Grid>
+              <Ellipse Stroke="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" StrokeThickness="10"/>
+              <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </Grid>
+          </ControlTemplate>
+        </Button.Template>
+      </Button>
+    </DockPanel>
     <Image Grid.Column="0" Grid.Row="0" Height="390" Width="755" Margin="0, 0, 0, 5" Grid.ColumnSpan="2" Name="mainDisplay"/>
     <!-- WindowsFormsHost Grid.Column="0" Grid.Row="0" Margin="0, 0, 0, 5" Grid.ColumnSpan="2">
       <emgu:ImageBox x:Name="mainDisplay" SizeMode="AutoSize"/>
@@ -30,17 +45,5 @@
     <!-- WindowsFormsHost Grid.Column="1" Grid.Row="1" Margin="2.5, 0, 0, 0">
       <emgu:ImageBox x:Name="rightDisplay" SizeMode="AutoSize"/>
     </WindowsFormsHost -->
-    <DockPanel Panel.ZIndex="1000" Name="hiddenPanel" Height="600" Width="765" Visibility="Collapsed" MouseEnter="DockPanel_MouseEnter" OpacityMask="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}">
-      <Button Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content=";" Click="Button_Click">
-        <Button.Template>
-          <ControlTemplate TargetType="Button">
-            <Grid>
-              <Ellipse Stroke="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" StrokeThickness="10"/>
-              <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            </Grid>
-          </ControlTemplate>
-        </Button.Template>
-      </Button>
-    </DockPanel>
   </Grid>
 </Page>

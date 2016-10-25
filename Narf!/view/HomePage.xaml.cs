@@ -1,6 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
+using Emgu.CV.WPF;
 using Microsoft.Win32;
 using Narf.Model;
 using System;
@@ -16,6 +17,7 @@ namespace Narf.View {
   /// Lógica de interacción para HomePage.xaml
   /// </summary>
   partial class HomePage : Page {
+    static readonly short MAX_CAPTURES = 3;
     ICollection<Case> Cases { get; set; }
     NewCasePage NewCasePage { get; set; }
     Entities Session { get; }
@@ -37,15 +39,6 @@ namespace Narf.View {
       casesList.ItemsSource = Cases;
     }
 
-    void testInit() {
-      var image = new Mat(270, 465, DepthType.Cv8U, 3);
-      image.SetTo(new Bgr(111, 111, 111).MCvScalar);
-      CvInvoke.PutText(image, "Preview", new System.Drawing.Point(10, 50),
-                       FontFace.HersheyPlain, 3.0,
-                       new Bgr(255.0, 0.0, 0.0).MCvScalar);
-      previewDisplay.Image = image;
-    }
-
     void newCaseBttn_Click(object sender, RoutedEventArgs args) {
       var fileDialog = new OpenFileDialog();
       fileDialog.Multiselect = true;
@@ -54,6 +47,11 @@ namespace Narf.View {
         "Archivos MP4 (*.mp4)|*.mp4";
       bool? result = fileDialog.ShowDialog();
       if (result == true) {
+        if (fileDialog.FileNames.Length > MAX_CAPTURES) {
+          MessageBox.Show("Sólo se pueden procesar hasta " + MAX_CAPTURES +
+                          "archivos", "Demasiados archivos fuente",
+                          MessageBoxButton.OK, MessageBoxImage.Error);
+        }
         Session.SaveChanges();
         NewCasePage = new NewCasePage(fileDialog.FileNames, Session);
         NavigationService.Navigate(NewCasePage);
@@ -71,6 +69,11 @@ namespace Narf.View {
         Session.SaveChanges();
         RefreshCases();
       }
+    }
+
+    void casesList_SelectionChanged(object sender, RoutedEventArgs args) {
+      var selected = (Case)casesList.SelectedItem;
+      // TO DO
     }
   }
 }

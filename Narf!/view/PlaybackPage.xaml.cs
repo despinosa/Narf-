@@ -39,12 +39,17 @@ namespace Narf.View {
 
     public PlaybackPage(Entities session, Case case_, Capture[] captures) {
       Session = session;
-      Analyzer = Analyzer.ForCase(case_, captures);
+      Analyzer = Analyzer.ForCase(case_, captures); // puede lanzar excepción
       RefreshTimers = new DispatcherTimer[3];
       FinishedTimer = new DispatcherTimer();
       Displays = new Image[3];
       OverlayPanel = new OverlayPanel(Session, this);
       InitializeComponent();
+      OverlayPanel.Visibility = Visibility.Collapsed;
+      Grid.SetRowSpan(OverlayPanel, 2);
+      Grid.SetColumnSpan(OverlayPanel, 2);
+      Panel.SetZIndex(OverlayPanel, 1000);
+      _mainPanel.Children.Add(OverlayPanel);
       Displays[(int)SourceAngle.Aerial] = mainDisplay;
       Displays[(int)SourceAngle.Closed] = leftDisplay;
       Displays[(int)SourceAngle.Open] = rightDisplay;
@@ -52,35 +57,25 @@ namespace Narf.View {
       FinishedTimer.IsEnabled = true;
     }
 
-    /*
-    protected async Task PeriodicRefresh(SourceAngle angle) {
-      while (!Token.IsCancellationRequested) {
-        AngleRefreshFlag += 1 >> (int)angle;
-        ((Action)Refresh).Invoke();
-        if (RefreshIntervals[(int)angle] > TimeSpan.Zero) {
-          await Task.Delay(RefreshIntervals[(int)angle], Token);
-        }
-      }
-    } */
-
-    void Refresh(dynamic sender, EventArgs args) {
-      var frame = Analyzer.NextFrameFor(sender.Tag);
+    void Refresh(object sender, EventArgs args) {
+      var timer = (DispatcherTimer)sender;
+      var frame = Analyzer.NextFrameFor((SourceAngle)timer.Tag);
       if (frame == null) {
-        sender.IsEnabled = false;
-        angleFinshedFlag += 1 << (int)sender.Tag;
+        timer.IsEnabled = false;
+        angleFinshedFlag += 1 << (int)timer.Tag;
       } else {
-        Displays[(int)sender.Tag].Source = BitmapSourceConvert.
+        Displays[(int)timer.Tag].Source = BitmapSourceConvert.
           ToBitmapSource(frame);
       }
     }
 
     void Grid_Initialized(object sender, EventArgs e) {
-      var max_interval = double.MaxValue;
+      var maxInterval = double.MaxValue;
       foreach (SourceAngle angle in Enum.GetValues(typeof(SourceAngle))) {
         if (Analyzer.Sources[(int)angle] != null) {
           double interval = 1 / Analyzer.Sources[(int)angle].
             GetCaptureProperty(CapProp.Fps);
-          max_interval = Math.Max(max_interval, interval);
+          maxInterval = Math.Max(maxInterval, interval);
           RefreshTimers[(int)angle] = new DispatcherTimer() {
             Interval = TimeSpan.FromSeconds(interval), Tag = angle
           };
@@ -89,14 +84,35 @@ namespace Narf.View {
       }
     }
 
-    void DockPanel_MouseEnter(object sender, MouseEventArgs e) {
-      hiddenPanel.Visibility = Visibility.Visible;
+    void Panel_MouseEnter(object sender, MouseEventArgs args) {
+      _hiddenPanel.Visibility = Visibility.Visible;
     }
 
-    void Button_Click(object sender, RoutedEventArgs e) {
+    void Panel_MouseLeave(object sender, MouseEventArgs args) {
+      _hiddenPanel.Visibility = Visibility.Collapsed;
+    }
+
+    void Pause_Click(object sender, RoutedEventArgs args) {
+      MouseEnter -= Panel_MouseEnter;
+      MouseLeave -= Panel_MouseLeave;
+      _hiddenPanel.Visibility = Visibility.Collapsed;
+      OverlayPanel.Visibility = Visibility.Visible;
       foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = false;
+    }
+
+    public void Play_Click(object sender, RoutedEventArgs args) {
+      MouseEnter += Panel_MouseEnter;
+      MouseLeave += Panel_MouseLeave;
+      OverlayPanel.Visibility = Visibility.Collapsed;
+      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
+    }
+
+    public void Behaviour_Click(object sender, RoutedEventArgs args) {
+      var behaviour = (Behaviour)sender;
+      Analyzer.BehaviourTriggered(behaviour);
       Session.SaveChangesAsync();
-      hiddenPanel.Visibility = Visibility.Collapsed;
+      OverlayPanel.Visibility = Visibility.Collapsed;
+      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
     }
   }
 }

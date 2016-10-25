@@ -6,6 +6,9 @@
       xmlns:local="clr-namespace:Narf.View"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="765">
+  <Grid.Background>
+    <SolidColorBrush  Opacity="0.5" Color="{DynamicResource {x:Static SystemColors.DesktopColorKey}}"/>
+  </Grid.Background>
   <Grid.ColumnDefinitions>
     <ColumnDefinition/>
     <ColumnDefinition Width="400"/>
@@ -26,6 +29,7 @@
       <Setter Property="VerticalAlignment" Value="Center"/>
       <Setter Property="HorizontalAlignment" Value="Center"/>
       <Setter Property="FontSize" Value="16"/>
+      <Setter Property="BorderBrush" Value="Transparent"/>
     </Style>
     <Style TargetType="{x:Type Ellipse}">
       <Setter Property="Stroke" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"/>
@@ -57,7 +61,7 @@
   </Button>
 
   <!-- Play -->
-  <Button Grid.Row="1" Grid.Column="1" Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content="4">
+  <Button Grid.Row="1" Grid.Column="1" Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content="4" Click="Button_Click">
     <Button.Template>
       <ControlTemplate TargetType="Button">
         <Grid>
@@ -69,20 +73,9 @@
   </Button>
 
   <!-- Behavioural patterns input -->
-  <local:RadialPanel Grid.Row="1" Grid.Column="1" x:Name="innerRing" Height="240" Width="240">
-    <Button Content="levantamiento"/>
-    <Button Content="se acicala"/>
-    <Button Content="se sacude"/>
-    <Button Content="bolos fecales"/>
-  </local:RadialPanel>
+  <local:RadialPanel Grid.Row="1" Grid.Column="1" x:Name="innerRing" Height="240" Width="240"/>
   <Ellipse Grid.Row="1" Grid.Column="1" Height="275" Width="275" StrokeThickness="7.5"/>
-  <local:RadialPanel Grid.Row="1" Grid.Column="1" x:Name="outerRing" Height="390" Width="390">
-    <Button Content="asoma cabeza"/>
-    <Button Content="se rasca"/>
-    <Button Content="emite sonidos"/>
-    <Button Content="mordisquea"/>
-    <Button Content="rasca"/>
-  </local:RadialPanel>
+  <local:RadialPanel Grid.Row="1" Grid.Column="1" x:Name="outerRing" Height="390" Width="390"/>
   <Ellipse Grid.Row="1" Grid.Column="1" Height="400" Width="400" StrokeThickness="7.5"/>
   
   <!-- Next frame -->

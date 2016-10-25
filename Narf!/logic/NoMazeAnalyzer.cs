@@ -8,17 +8,8 @@ using System.Threading.Tasks;
 
 namespace Narf.Logic {
   class NoMazeAnalyzer : Analyzer {
-    public NoMazeAnalyzer(Case case_, Capture[] sources) {
-      Case = case_;
-      Sources = sources;
-      CurrentFrames = new Mat[Enum.GetValues(typeof(SourceAngle)).Length];
-      Ellapsed = new TimeSpan(0);
-    }
-
-    public override Mat NextFrameFor(SourceAngle angle) {
-      CurrentFrames[(int)angle]?.Dispose();
-      CurrentFrames[(int)angle] = Sources[(int)angle].QueryFrame();
-      return CurrentFrames[(int)angle];
+    public NoMazeAnalyzer(Case case_, Capture[] sources) : base(case_, sources) {
+      throw new NotImplementedException();
     }
   }
 }

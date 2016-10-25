@@ -1,5 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Narf.Logic;
 using Narf.Model;
 using System;
 using System.Collections.Generic;
@@ -37,25 +38,47 @@ namespace Narf.View {
       mazeCombo.ItemsSource = Enum.GetValues(typeof(Maze));
     }
 
-    void new_Click(object sender, RoutedEventArgs e) {
-      if (date.SelectedDate == null || time.Value == null ||
-          substance.Text == "" || subject.Text == "" || weight.Value == null) {
+    bool _validate() {
+      var valid = date.SelectedDate != null && time.Value != null &&
+        mazeCombo.SelectedItem != null && substance.Text != "" &&
+        subject.Text != "" && weight.Value != null;
+      if (!valid) {
         MessageBox.Show("Debe llenar todos los datos.",
                         "Datos incompletos", MessageBoxButton.OK,
                         MessageBoxImage.Error);
-        return;
       }
+      return valid;
+    }
+
+    void new_Click(object sender, RoutedEventArgs args) {
+      if (!_validate()) return;
       var duration = (from c in Captures select
                       c.GetCaptureProperty(CapProp.FrameCount) /
                       c.GetCaptureProperty(CapProp.Fps)).Min();
       var _date = (DateTime)date.SelectedDate + ((DateTime)time.Value).TimeOfDay;
+      var videoHash = 0;
+      foreach (SourceAngle angle in Enum.GetValues(typeof(SourceAngle))) {
+        videoHash ^= Captures[(int)angle].GetHashCode();
+      }
       Case = new Case() {
         Date = _date, Duration = (short)duration,
         Substance = substance.Text, Dose = dose.Value, Subject = subject.Text,
-        Weight = (decimal)weight.Value, Maze = (Maze)mazeCombo.SelectedItem
+        Weight = (decimal)weight.Value, Maze = (Maze)mazeCombo.SelectedItem,
+        VideoHash = videoHash, Notes = notes.Text,
+        Preview = Captures[(int)SourceAngle.Aerial].QuerySmallFrame().GetData()
       };
       Session.Cases.Add(Case);
-      PlaybackPage = new PlaybackPage(Session, Case, Captures);
+      try {
+        PlaybackPage = new PlaybackPage(Session, Case, Captures);
+      } catch (ArgumentException exc) {
+        var result = MessageBox.Show(exc.Message, "Error", MessageBoxButton.OK,
+                                     MessageBoxImage.Error);
+        if (result == MessageBoxResult.OK) {
+          NavigationService.GoBack();
+          return;
+        }
+      }
+      Session.SaveChangesAsync();
       NavigationService.Navigate(PlaybackPage);
     }
   }

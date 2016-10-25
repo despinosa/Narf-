@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Emgu.CV;
+using Narf.Model;
 
 namespace Narf.Logic {
   class XMazeAnalyzer : Analyzer {
-    public XMazeAnalyzer(string videoPath) {
-      throw new NotImplementedException(this.GetType().Name);
-    }
-
-    public override Mat NextFrameFor(SourceAngle angle) {
+    public XMazeAnalyzer(Case case_, Capture[] sources) : base(case_, sources) {
       throw new NotImplementedException();
     }
   }
