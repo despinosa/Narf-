@@ -37,7 +37,7 @@
   </Grid.Resources>
   
   <!-- Previous frame -->
-  <Button Grid.Row="1" Grid.Column="0" Height="75" Width="75" FontFamily="Webdings" FontSize="48" Content="9">
+  <Button Grid.Row="1" Grid.Column="0" Height="75" Width="75" FontFamily="Webdings" FontSize="48" Content="9" Click="Prev_Click">
     <Button.Template>
       <ControlTemplate TargetType="Button">
         <Grid>
@@ -61,7 +61,7 @@
   </Button>
 
   <!-- Play -->
-  <Button Grid.Row="1" Grid.Column="1" Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content="4" Click="Button_Click">
+  <Button Grid.Row="1" Grid.Column="1" Height="150" Width="150" FontFamily="Webdings" FontSize="126" Content="4" Click="Play_Click">
     <Button.Template>
       <ControlTemplate TargetType="Button">
         <Grid>
@@ -79,7 +79,7 @@
   <Ellipse Grid.Row="1" Grid.Column="1" Height="400" Width="400" StrokeThickness="7.5"/>
   
   <!-- Next frame -->
-  <Button Grid.Row="1" Grid.Column="2" Height="75" Width="75" FontFamily="Webdings" FontSize="48" Content=":" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}">
+  <Button Grid.Row="1" Grid.Column="2" Height="75" Width="75" FontFamily="Webdings" FontSize="48" Content=":" Foreground="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}" Click="Next_Click">
     <Button.Template>
       <ControlTemplate TargetType="Button">
         <Grid>

@@ -26,6 +26,7 @@ namespace Narf.Logic {
       }
     }
     static readonly int BUFFER_SIZE = 100;
+    protected float DeltaT { get; }
     public float SecondsEllapsed { get; protected set; }
     public Capture[] Sources { get; }
     protected Case Case { get; }
@@ -35,18 +36,27 @@ namespace Narf.Logic {
       Sources = sources;
       FrameBuffers = new CyclicBuffer<Mat>[Sources.Length];
       for (int i = 0; i < Sources.Length; i++) {
+        DeltaT += (float)Sources[i].GetCaptureProperty(CapProp.Fps);
         FrameBuffers[i] = new CyclicBuffer<Mat>(BUFFER_SIZE);
       }
-      SecondsEllapsed = 0;
+      DeltaT = 1 / DeltaT;
+      SecondsEllapsed = 0f;
     }
 
     public Mat NextFrameFor(SourceAngle angle) {
+      SecondsEllapsed += DeltaT;
       if (FrameBuffers[(int)angle].HasForward()) {
         return FrameBuffers[(int)angle].ForwardRead();
       }
       var newFrame = Sources[(int)angle].QuerySmallFrame();
+      /* procesar frame ahora! */
       FrameBuffers[(int)angle].Write(newFrame);
       return newFrame;
+    }
+
+    public Mat PrevFrameFor(SourceAngle angle) {
+      if (FrameBuffers[(int)angle].HasBackward()) SecondsEllapsed -= DeltaT;
+      return FrameBuffers[(int)angle].BackwardRead();
     }
 
     public void BehaviourTriggered(Behaviour behaviour) {

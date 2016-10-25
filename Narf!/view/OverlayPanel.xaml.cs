@@ -49,8 +49,16 @@ namespace Narf.View {
       }
     }
 
-    void Button_Click(object sender, RoutedEventArgs args) {
+    void Play_Click(object sender, RoutedEventArgs args) {
       Main.Play_Click(sender, args);
+    }
+
+    void Prev_Click(object sender, RoutedEventArgs args) {
+      Main.Prev_Click(sender, args);
+    }
+
+    void Next_Click(object sender, RoutedEventArgs args) {
+      Main.Next_Click(sender, args);
     }
   }
 }

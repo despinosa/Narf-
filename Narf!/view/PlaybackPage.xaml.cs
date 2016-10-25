@@ -107,6 +107,25 @@ namespace Narf.View {
       foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
     }
 
+    public void Next_Click(object sender, RoutedEventArgs args) {
+      for (int i = 0; i < Displays.Length; i++) {
+        var frame = Analyzer.NextFrameFor((SourceAngle)i);
+        if (frame != null) {
+          Displays[i].Source = BitmapSourceConvert.ToBitmapSource(frame);
+        }
+      }
+    }
+
+
+    public void Prev_Click(object sender, RoutedEventArgs args) {
+      for (int i = 0; i < Displays.Length; i++) {
+        var frame = Analyzer.PrevFrameFor((SourceAngle)i);
+        if (frame != null) {
+          Displays[i].Source = BitmapSourceConvert.ToBitmapSource(frame);
+        }
+      }
+    }
+
     public void Behaviour_Click(object sender, RoutedEventArgs args) {
       var behaviour = (Behaviour)sender;
       Analyzer.BehaviourTriggered(behaviour);
