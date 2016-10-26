@@ -30,17 +30,26 @@ namespace Narf.Logic {
     public float SecondsEllapsed { get; protected set; }
     public Capture[] Sources { get; }
     protected Case Case { get; }
-    protected CyclicBuffer<Mat>[] FrameBuffers { get; }
+    protected DisposablesCyclicBuffer<Mat>[] FrameBuffers { get; }
     public Analyzer(Case case_, Capture[] sources) {
       Case = case_;
       Sources = sources;
-      FrameBuffers = new CyclicBuffer<Mat>[Sources.Length];
+      FrameBuffers = new DisposablesCyclicBuffer<Mat>[Sources.Length];
       for (int i = 0; i < Sources.Length; i++) {
-        DeltaT += (float)Sources[i].GetCaptureProperty(CapProp.Fps);
-        FrameBuffers[i] = new CyclicBuffer<Mat>(BUFFER_SIZE);
+        DeltaT += (float)(Sources[i].GetCaptureProperty(CapProp.Fps) /
+                          Sources.Length);
+        FrameBuffers[i] = new DisposablesCyclicBuffer<Mat>(BUFFER_SIZE);
       }
       DeltaT = 1 / DeltaT;
       SecondsEllapsed = 0f;
+    }
+    
+    async Task AnalyzeAndBuffer() {
+      var newFrames = new Mat[Sources.Length];
+      do {
+        foreach (var angle in Enum.GetValues(typeof(SourceAngle))) {
+        }
+      } while (newFrames.All(f => f != null));
     }
 
     public Mat NextFrameFor(SourceAngle angle) {

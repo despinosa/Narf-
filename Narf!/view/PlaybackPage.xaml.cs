@@ -130,6 +130,8 @@ namespace Narf.View {
       var behaviour = (Behaviour)sender;
       Analyzer.BehaviourTriggered(behaviour);
       Session.SaveChangesAsync();
+      MouseEnter += Panel_MouseEnter;
+      MouseLeave += Panel_MouseLeave;
       OverlayPanel.Visibility = Visibility.Collapsed;
       foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
     }

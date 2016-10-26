@@ -154,7 +154,7 @@
     </Compile>
     <Compile Include="Logic\Analyzer.cs" />
     <Compile Include="Logic\NoMazeAnalyzer.cs" />
-    <Compile Include="Logic\Util\CyclicBuffer.cs" />
+    <Compile Include="Logic\Util\DisposablesCyclicBuffer.cs" />
     <Compile Include="Logic\XMazeAnalyzer.cs" />
     <Compile Include="Model\Behaviour.cs">
       <DependentUpon>Generated.tt</DependentUpon>

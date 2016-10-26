@@ -17,7 +17,7 @@ namespace Narf.View {
   /// Lógica de interacción para HomePage.xaml
   /// </summary>
   partial class HomePage : Page {
-    static readonly short MAX_CAPTURES = 3;
+    static readonly short MAX_SOURCES = 3;
     ICollection<Case> Cases { get; set; }
     NewCasePage NewCasePage { get; set; }
     Entities Session { get; }
@@ -47,12 +47,12 @@ namespace Narf.View {
         "Archivos MP4 (*.mp4)|*.mp4";
       bool? result = fileDialog.ShowDialog();
       if (result == true) {
-        if (fileDialog.FileNames.Length > MAX_CAPTURES) {
-          MessageBox.Show("Sólo se pueden procesar hasta " + MAX_CAPTURES +
+        if (fileDialog.FileNames.Length > MAX_SOURCES) {
+          MessageBox.Show("Sólo se pueden procesar hasta " + MAX_SOURCES +
                           "archivos", "Demasiados archivos fuente",
                           MessageBoxButton.OK, MessageBoxImage.Error);
         }
-        Session.SaveChanges();
+        Session.SaveChangesAsync();
         NewCasePage = new NewCasePage(fileDialog.FileNames, Session);
         NavigationService.Navigate(NewCasePage);
       }
