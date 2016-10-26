@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Narf.Logic.Util {
-  class CyclicBuffer<T> where T:IDisposable {
+  public class CyclicBuffer<T> where T:IDisposable {
     public int Size { get; }
     T[] Content { get; }
     int Written { get; set; }
