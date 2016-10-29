@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Narf.Logic {
@@ -26,51 +27,51 @@ namespace Narf.Logic {
       }
     }
     static readonly int BUFFER_SIZE = 100;
-    protected float DeltaT { get; }
-    public float SecondsEllapsed { get; protected set; }
+    protected double DeltaT { get; }
+    public double TimePlaying { get; protected set; }
     public Capture[] Sources { get; }
     protected Case Case { get; }
     protected DisposablesCyclicBuffer<Mat>[] FrameBuffers { get; }
+    protected Thread Worker { get; }
+
     public Analyzer(Case case_, Capture[] sources) {
       Case = case_;
       Sources = sources;
       FrameBuffers = new DisposablesCyclicBuffer<Mat>[Sources.Length];
       for (int i = 0; i < Sources.Length; i++) {
-        DeltaT += (float)(Sources[i].GetCaptureProperty(CapProp.Fps) /
-                          Sources.Length);
+        DeltaT += Sources[i].GetCaptureProperty(CapProp.Fps);
         FrameBuffers[i] = new DisposablesCyclicBuffer<Mat>(BUFFER_SIZE);
       }
       DeltaT = 1 / DeltaT;
-      SecondsEllapsed = 0f;
+      TimePlaying = 0f;
+      Worker = new Thread(AnalyzeAndBuffer);
+      Worker.Start();
     }
     
-    async Task AnalyzeAndBuffer() {
-      var newFrames = new Mat[Sources.Length];
-      do {
-        foreach (var angle in Enum.GetValues(typeof(SourceAngle))) {
+    protected virtual void AnalyzeAndBuffer() {
+      var newFrames = Enumerable.Select(Sources, (s => s.QuerySmallFrame()));
+      while (newFrames.All(f => f != null)) {
+        // procesar frame ahora!
+        foreach (var source in Enum.GetValues(typeof(SourceAngle))) {
+          FrameBuffers[(int)source].Write(newFrames.ElementAt((int)source));
         }
-      } while (newFrames.All(f => f != null));
+        newFrames = Enumerable.Select(Sources, (s => s.QuerySmallFrame()));
+      }
     }
 
     public Mat NextFrameFor(SourceAngle angle) {
-      SecondsEllapsed += DeltaT;
-      if (FrameBuffers[(int)angle].HasForward()) {
-        return FrameBuffers[(int)angle].ForwardRead();
-      }
-      var newFrame = Sources[(int)angle].QuerySmallFrame();
-      /* procesar frame ahora! */
-      FrameBuffers[(int)angle].Write(newFrame);
-      return newFrame;
+      if (FrameBuffers[(int)angle].HasForward()) TimePlaying += DeltaT;
+      return FrameBuffers[(int)angle].ForwardRead();
     }
 
     public Mat PrevFrameFor(SourceAngle angle) {
-      if (FrameBuffers[(int)angle].HasBackward()) SecondsEllapsed -= DeltaT;
+      if (FrameBuffers[(int)angle].HasBackward()) TimePlaying -= DeltaT;
       return FrameBuffers[(int)angle].BackwardRead();
     }
 
     public void BehaviourTriggered(Behaviour behaviour) {
       var event_ = new BehaviourEvent() {
-        Case = Case, Behaviour = behaviour, Time = (short)SecondsEllapsed
+        Case = Case, Behaviour = behaviour, Time = (short)TimePlaying
       };
       Case.BehaviourEvents.Add(event_);
     }

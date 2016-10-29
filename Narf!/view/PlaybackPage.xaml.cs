@@ -69,8 +69,13 @@ namespace Narf.View {
       }
     }
 
+    void CheckCleanup(object sender, EventArgs args) {
+      if (RefreshTimers.Any(t => t.IsEnabled)) return;
+      
+    }
+
     void Grid_Initialized(object sender, EventArgs e) {
-      var maxInterval = double.MaxValue;
+      double maxInterval = double.MinValue;
       foreach (SourceAngle angle in Enum.GetValues(typeof(SourceAngle))) {
         if (Analyzer.Sources[(int)angle] != null) {
           double interval = 1 / Analyzer.Sources[(int)angle].
@@ -82,6 +87,8 @@ namespace Narf.View {
           RefreshTimers[(int)angle].Tick += Refresh;
         }
       }
+      FinishedTimer.Interval = TimeSpan.FromSeconds(maxInterval);
+      FinishedTimer.Tick += CheckCleanup;
     }
 
     void Panel_MouseEnter(object sender, MouseEventArgs args) {
