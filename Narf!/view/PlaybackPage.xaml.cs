@@ -1,7 +1,4 @@
 ﻿using Emgu.CV;
-using Emgu.CV.CvEnum;
-using Emgu.CV.UI;
-using Emgu.CV.WPF;
 using Microsoft.Win32;
 using Narf.Logic;
 using Narf.Model;
@@ -28,23 +25,44 @@ namespace Narf.View {
   /// Lógica de interacción para PlaybackPage.xaml
   /// </summary>
   partial class PlaybackPage : Page {
-    int angleFinshedFlag = 0;
     internal Analyzer Analyzer { get; }
     CancellationToken Token { get; set; } = CancellationToken.None;
-    DispatcherTimer FinishedTimer { get; }
-    DispatcherTimer[] RefreshTimers { get; }
+    Case Case { get; set; }
+    DispatcherTimer RefreshTimer { get; }
     Entities Session { get; }
     Image[] Displays { get; }
     OverlayPanel OverlayPanel { get; }
+    ResultsPage ResultsPage { get; }
 
-    public PlaybackPage(Entities session, Case case_, Capture[] captures) {
+    public PlaybackPage(Entities session, Case @case, Capture[] captures) {
       Session = session;
-      Analyzer = Analyzer.ForCase(case_, captures); // puede lanzar excepción
-      RefreshTimers = new DispatcherTimer[3];
-      FinishedTimer = new DispatcherTimer();
+      Case = @case;
+      Analyzer = Analyzer.ForCase(@case, captures); // puede lanzar excepción
+      RefreshTimer = new DispatcherTimer(DispatcherPriority.Render);
       Displays = new Image[3];
       OverlayPanel = new OverlayPanel(Session, this);
+      ResultsPage = new ResultsPage(Case);
       InitializeComponent();
+    }
+
+    void Refresh(object sender, EventArgs args) {
+      var timer = (DispatcherTimer)sender;
+      var newFrames = Analyzer.NextFrames();
+      if (newFrames.All(f => f == null)) {
+        timer.Stop();
+      } else {
+        foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
+          Displays[angle].Source = newFrames.ElementAt(angle);
+        }
+      }
+    }
+
+    void CleanupHandler(object sender, EventArgs args) {
+      Analyzer.Dispose();
+      NavigationService.Navigate(ResultsPage);
+    }
+
+    void Grid_Initialized(object sender, EventArgs e) {
       OverlayPanel.Visibility = Visibility.Collapsed;
       Grid.SetRowSpan(OverlayPanel, 2);
       Grid.SetColumnSpan(OverlayPanel, 2);
@@ -53,42 +71,9 @@ namespace Narf.View {
       Displays[(int)SourceAngle.Aerial] = mainDisplay;
       Displays[(int)SourceAngle.Closed] = leftDisplay;
       Displays[(int)SourceAngle.Open] = rightDisplay;
-      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
-      FinishedTimer.IsEnabled = true;
-    }
-
-    void Refresh(object sender, EventArgs args) {
-      var timer = (DispatcherTimer)sender;
-      var frame = Analyzer.NextFrameFor((SourceAngle)timer.Tag);
-      if (frame == null) {
-        timer.IsEnabled = false;
-        angleFinshedFlag += 1 << (int)timer.Tag;
-      } else {
-        Displays[(int)timer.Tag].Source = BitmapSourceConvert.
-          ToBitmapSource(frame);
-      }
-    }
-
-    void CheckCleanup(object sender, EventArgs args) {
-      if (RefreshTimers.Any(t => t.IsEnabled)) return;
-      
-    }
-
-    void Grid_Initialized(object sender, EventArgs e) {
-      double maxInterval = double.MinValue;
-      foreach (SourceAngle angle in Enum.GetValues(typeof(SourceAngle))) {
-        if (Analyzer.Sources[(int)angle] != null) {
-          double interval = 1 / Analyzer.Sources[(int)angle].
-            GetCaptureProperty(CapProp.Fps);
-          maxInterval = Math.Max(maxInterval, interval);
-          RefreshTimers[(int)angle] = new DispatcherTimer() {
-            Interval = TimeSpan.FromSeconds(interval), Tag = angle
-          };
-          RefreshTimers[(int)angle].Tick += Refresh;
-        }
-      }
-      FinishedTimer.Interval = TimeSpan.FromSeconds(maxInterval);
-      FinishedTimer.Tick += CheckCleanup;
+      RefreshTimer.Interval = TimeSpan.FromSeconds(Analyzer.DeltaT);
+      RefreshTimer.Tick += Refresh;
+      RefreshTimer.Start();
     }
 
     void Panel_MouseEnter(object sender, MouseEventArgs args) {
@@ -104,32 +89,27 @@ namespace Narf.View {
       MouseLeave -= Panel_MouseLeave;
       _hiddenPanel.Visibility = Visibility.Collapsed;
       OverlayPanel.Visibility = Visibility.Visible;
-      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = false;
+      RefreshTimer.Stop();
     }
 
     public void Play_Click(object sender, RoutedEventArgs args) {
       MouseEnter += Panel_MouseEnter;
       MouseLeave += Panel_MouseLeave;
       OverlayPanel.Visibility = Visibility.Collapsed;
-      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
+      RefreshTimer.Start();
     }
 
     public void Next_Click(object sender, RoutedEventArgs args) {
-      for (int i = 0; i < Displays.Length; i++) {
-        var frame = Analyzer.NextFrameFor((SourceAngle)i);
-        if (frame != null) {
-          Displays[i].Source = BitmapSourceConvert.ToBitmapSource(frame);
-        }
+      var nextFrames = Analyzer.NextFrames();
+      foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
+        Displays[angle].Source = nextFrames.ElementAt(angle);
       }
     }
 
-
     public void Prev_Click(object sender, RoutedEventArgs args) {
-      for (int i = 0; i < Displays.Length; i++) {
-        var frame = Analyzer.PrevFrameFor((SourceAngle)i);
-        if (frame != null) {
-          Displays[i].Source = BitmapSourceConvert.ToBitmapSource(frame);
-        }
+      var prevFrames = Analyzer.PrevFrames();
+      foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
+        Displays[angle].Source = prevFrames.ElementAt(angle);
       }
     }
 
@@ -140,7 +120,7 @@ namespace Narf.View {
       MouseEnter += Panel_MouseEnter;
       MouseLeave += Panel_MouseLeave;
       OverlayPanel.Visibility = Visibility.Collapsed;
-      foreach (DispatcherTimer timer in RefreshTimers) timer.IsEnabled = true;
+      RefreshTimer.Start();
     }
   }
 }

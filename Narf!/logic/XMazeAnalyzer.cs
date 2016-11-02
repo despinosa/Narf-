@@ -8,7 +8,7 @@ using Narf.Model;
 
 namespace Narf.Logic {
   class XMazeAnalyzer : Analyzer {
-    public XMazeAnalyzer(Case case_, Capture[] sources) : base(case_, sources) {
+    public XMazeAnalyzer(Case @case, Capture[] sources) : base(@case, sources) {
       throw new NotImplementedException();
     }
   }

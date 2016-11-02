@@ -1,5 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.WPF;
+using Emgu.CV.VideoSurveillance;
 using Narf.Logic.Util;
 using Narf.Model;
 using System;
@@ -8,14 +10,16 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace Narf.Logic {
   public enum SourceAngle { Aerial, Closed, Open }
-  class Analyzer {
-    public static Analyzer ForCase(Case case_, Capture[] sources) {
-      switch (case_.Maze) {
+  class Analyzer : IDisposable {
+    public static Analyzer ForCase(Case @case, Capture[] sources) {
+      switch (@case.Maze) {
         default:
-          return new Analyzer(case_, sources);
+          return new Analyzer(@case, sources);
         /* TO DO: hacer abstracta e implementar estas subclases
         case Maze.None:
           return new NoMazeAnalyzer(case_, sources);
@@ -27,53 +31,73 @@ namespace Narf.Logic {
       }
     }
     static readonly int BUFFER_SIZE = 100;
-    protected double DeltaT { get; }
+    public double DeltaT { get; }
     public double TimePlaying { get; protected set; }
     public Capture[] Sources { get; }
     protected Case Case { get; }
-    protected DisposablesCyclicBuffer<Mat>[] FrameBuffers { get; }
+    protected CyclicBuffer<ImageSource>[] FrameBuffers { get; }
+    protected ImagePreprocessor ImagePreprocessor { get; }
+    protected ObjectTracker ObjectTracker { get; }
     protected Thread Worker { get; }
 
-    public Analyzer(Case case_, Capture[] sources) {
-      Case = case_;
+    public Analyzer(Case @case, Capture[] sources) {
+      Case = @case;
       Sources = sources;
-      FrameBuffers = new DisposablesCyclicBuffer<Mat>[Sources.Length];
-      for (int i = 0; i < Sources.Length; i++) {
-        DeltaT += Sources[i].GetCaptureProperty(CapProp.Fps);
-        FrameBuffers[i] = new DisposablesCyclicBuffer<Mat>(BUFFER_SIZE);
-      }
-      DeltaT = 1 / DeltaT;
-      TimePlaying = 0f;
+      FrameBuffers = new CyclicBuffer<ImageSource>[Sources.Length];
+      DeltaT = 1 / (from s in Sources select
+                    s.GetCaptureProperty(CapProp.Fps)).Average();
+      FrameBuffers = (from s in Sources select new
+                      CyclicBuffer<ImageSource>(BUFFER_SIZE)).ToArray();
+      TimePlaying = 0;
       Worker = new Thread(AnalyzeAndBuffer);
       Worker.Start();
     }
+
+    protected virtual void AnalyzeFrames(IEnumerable<Mat> frames,
+                                         double time) {
+      frames = (from f in frames select
+                ImagePreprocessor.Preprocess(f)).ToArray();
+    }
     
     protected virtual void AnalyzeAndBuffer() {
-      var newFrames = Enumerable.Select(Sources, (s => s.QuerySmallFrame()));
-      while (newFrames.All(f => f != null)) {
-        // procesar frame ahora!
-        foreach (var source in Enum.GetValues(typeof(SourceAngle))) {
-          FrameBuffers[(int)source].Write(newFrames.ElementAt((int)source));
+      double headStart = 0;
+      Mat[] newFrames;
+      do {
+        headStart += DeltaT;
+        newFrames = (from s in Sources select s.QuerySmallFrame()).ToArray();
+        foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
+          FrameBuffers[angle].Write(
+            BitmapSourceConvert.ToBitmapSource(newFrames[angle])
+          );
         }
-        newFrames = Enumerable.Select(Sources, (s => s.QuerySmallFrame()));
-      }
+        AnalyzeFrames(newFrames, TimePlaying + headStart);
+      } while (newFrames.All(f => f != null));
+      foreach (var buffer in FrameBuffers) buffer.Finished = true;
     }
 
-    public Mat NextFrameFor(SourceAngle angle) {
-      if (FrameBuffers[(int)angle].HasForward()) TimePlaying += DeltaT;
-      return FrameBuffers[(int)angle].ForwardRead();
+    public IEnumerable<ImageSource> NextFrames() {
+      TimePlaying += (from b in FrameBuffers where b.HasForward || !b.Finished
+                      select DeltaT).FirstOrDefault();
+      return (from b in FrameBuffers select b.ForwardRead()).ToArray();
     }
 
-    public Mat PrevFrameFor(SourceAngle angle) {
-      if (FrameBuffers[(int)angle].HasBackward()) TimePlaying -= DeltaT;
-      return FrameBuffers[(int)angle].BackwardRead();
+    public IEnumerable<ImageSource> PrevFrames() {
+      TimePlaying -= (from b in FrameBuffers where b.HasBackward
+                      select DeltaT).FirstOrDefault();
+      return (from b in FrameBuffers select b.BackwardRead()).ToArray();
     }
 
     public void BehaviourTriggered(Behaviour behaviour) {
-      var event_ = new BehaviourEvent() {
+      var @event = new BehaviourEvent() {
         Case = Case, Behaviour = behaviour, Time = (short)TimePlaying
       };
-      Case.BehaviourEvents.Add(event_);
+      // enviar info del frame a KB de ML
+      Case.BehaviourEvents.Add(@event);
+    }
+
+    public void Dispose() {
+      foreach (var s in Sources) s.Dispose();
+      Worker.Join();
     }
   }
 }

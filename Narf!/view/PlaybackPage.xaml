@@ -34,16 +34,16 @@
       </Button>
     </DockPanel>
     <Image Grid.Column="0" Grid.Row="0" Height="390" Width="755" Margin="0, 0, 0, 5" Grid.ColumnSpan="2" Name="mainDisplay"/>
-    <!-- WindowsFormsHost Grid.Column="0" Grid.Row="0" Margin="0, 0, 0, 5" Grid.ColumnSpan="2">
-      <emgu:ImageBox x:Name="mainDisplay" SizeMode="AutoSize"/>
+    <!-- WindowsFormsHost Grid.Column="0" Grid.Row="0" Height="390" Width="755" Margin="0, 0, 0, 5" Grid.ColumnSpan="2">
+      <emgu:ImageBox x:Name="mainDisplay" SizeMode="StretchImage" FunctionalMode="Minimum"/>
     </WindowsFormsHost -->
     <Image Grid.Column="0" Grid.Row="1" Height="195" Width="377.5" HorizontalAlignment="Left" Name="leftDisplay"/>
-    <!-- WindowsFormsHost Grid.Column="0" Grid.Row="1" Margin="0, 0, 2.5, 0">
-      <emgu:ImageBox x:Name="leftDisplay" SizeMode="AutoSize"/>
+    <!-- WindowsFormsHost Grid.Column="0" Grid.Row="1" Height="195" Width="377.5" HorizontalAlignment="Left">
+      <emgu:ImageBox x:Name="leftDisplay" SizeMode="StretchImage" FunctionalMode="Minimum"/>
     </WindowsFormsHost -->
     <Image Grid.Column="1" Grid.Row="1" Height="195" Width="377.5" HorizontalAlignment="Right" Name="rightDisplay"/>
-    <!-- WindowsFormsHost Grid.Column="1" Grid.Row="1" Margin="2.5, 0, 0, 0">
-      <emgu:ImageBox x:Name="rightDisplay" SizeMode="AutoSize"/>
+    <!-- WindowsFormsHost Grid.Column="1" Grid.Row="1" Height="195" Width="377.5" HorizontalAlignment="Right">
+      <emgu:ImageBox x:Name="rightDisplay" SizeMode="AutoSize" FunctionalMode="Minimum"/>
     </WindowsFormsHost -->
   </Grid>
 </Page>

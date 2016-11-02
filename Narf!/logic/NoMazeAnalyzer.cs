@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Narf.Logic {
   class NoMazeAnalyzer : Analyzer {
-    public NoMazeAnalyzer(Case case_, Capture[] sources) : base(case_, sources) {
+    public NoMazeAnalyzer(Case @case, Capture[] sources) : base(@case, sources) {
       throw new NotImplementedException();
     }
   }
