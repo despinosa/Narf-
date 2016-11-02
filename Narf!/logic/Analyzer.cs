@@ -55,8 +55,6 @@ namespace Narf.Logic {
 
     protected virtual void AnalyzeFrames(IEnumerable<Mat> frames,
                                          double time) {
-      frames = (from f in frames select
-                ImagePreprocessor.Preprocess(f)).ToArray();
     }
     
     protected virtual void AnalyzeAndBuffer() {
@@ -66,17 +64,17 @@ namespace Narf.Logic {
         headStart += DeltaT;
         newFrames = (from s in Sources select s.QuerySmallFrame()).ToArray();
         foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
-          FrameBuffers[angle].Write(
-            BitmapSourceConvert.ToBitmapSource(newFrames[angle])
-          );
+          var converted = BitmapSourceConvert.ToBitmapSource(newFrames[angle]);
+          converted.Freeze();
+          FrameBuffers[angle].Write(converted);
         }
         AnalyzeFrames(newFrames, TimePlaying + headStart);
       } while (newFrames.All(f => f != null));
       foreach (var buffer in FrameBuffers) buffer.Finished = true;
     }
 
-    public IEnumerable<ImageSource> NextFrames() {
-      TimePlaying += (from b in FrameBuffers where b.HasForward || !b.Finished
+    public IEnumerable<ImageSource> NextFrames() { // bug
+      TimePlaying += (from b in FrameBuffers where b.HasForward // || !b.Finished
                       select DeltaT).FirstOrDefault();
       return (from b in FrameBuffers select b.ForwardRead()).ToArray();
     }

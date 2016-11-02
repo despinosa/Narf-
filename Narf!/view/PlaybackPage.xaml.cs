@@ -102,7 +102,8 @@ namespace Narf.View {
     public void Next_Click(object sender, RoutedEventArgs args) {
       var nextFrames = Analyzer.NextFrames();
       foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
-        Displays[angle].Source = nextFrames.ElementAt(angle);
+        Displays[angle].Source = new BitmapImage(new Uri(@"/Resources/offline.png", UriKind.Relative));
+        nextFrames.ElementAt(angle);
       }
     }
 
