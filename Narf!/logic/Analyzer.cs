@@ -1,8 +1,7 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.WPF;
 using Emgu.CV.VideoSurveillance;
-using Narf.Logic.Util;
+using Narf.Util;
 using Narf.Model;
 using System;
 using System.Collections.Generic;
@@ -15,6 +14,7 @@ using System.Windows.Media;
 
 namespace Narf.Logic {
   public enum SourceAngle { Aerial, Closed, Open }
+
   class Analyzer : IDisposable {
     public static Analyzer ForCase(Case @case, Capture[] sources) {
       switch (@case.Maze) {
@@ -30,7 +30,7 @@ namespace Narf.Logic {
                                             case_.Maze.ToString()); */
       }
     }
-    static readonly int BUFFER_SIZE = 100;
+    static readonly int BUFFER_SIZE = 30;
     public double DeltaT { get; }
     public double TimePlaying { get; protected set; }
     public Capture[] Sources { get; }
@@ -73,16 +73,16 @@ namespace Narf.Logic {
       foreach (var buffer in FrameBuffers) buffer.Finished = true;
     }
 
-    public IEnumerable<ImageSource> NextFrames() { // bug
-      TimePlaying += (from b in FrameBuffers where b.HasForward // || !b.Finished
+    public IEnumerable<ImageSource> NextFrames() {
+      TimePlaying += (from b in FrameBuffers where b.HasFront
                       select DeltaT).FirstOrDefault();
-      return (from b in FrameBuffers select b.ForwardRead()).ToArray();
+      return (from b in FrameBuffers select b.Read()).ToArray();
     }
 
     public IEnumerable<ImageSource> PrevFrames() {
-      TimePlaying -= (from b in FrameBuffers where b.HasBackward
+      TimePlaying -= (from b in FrameBuffers where b.HasBack
                       select DeltaT).FirstOrDefault();
-      return (from b in FrameBuffers select b.BackwardRead()).ToArray();
+      return (from b in FrameBuffers select b.ReadBack()).ToArray();
     }
 
     public void BehaviourTriggered(Behaviour behaviour) {

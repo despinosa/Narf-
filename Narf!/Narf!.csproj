@@ -156,7 +156,7 @@
     <Compile Include="Logic\ImagePreprocessor.cs" />
     <Compile Include="Logic\NoMazeAnalyzer.cs" />
     <Compile Include="Logic\ObjectTracker.cs" />
-    <Compile Include="Logic\Util\CyclicBuffer.cs" />
+    <Compile Include="Util\CyclicBuffer.cs" />
     <Compile Include="Logic\XMazeAnalyzer.cs" />
     <Compile Include="Model\Behaviour.cs">
       <DependentUpon>Generated.tt</DependentUpon>
@@ -204,8 +204,8 @@
     <Compile Include="View\ResultsPage.xaml.cs">
       <DependentUpon>ResultsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Util\BitmapSourceConverter.cs" />
-    <Compile Include="View\Util\RadialPanel.cs" />
+    <Compile Include="Util\BitmapSourceConverter.cs" />
+    <Compile Include="Util\RadialPanel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

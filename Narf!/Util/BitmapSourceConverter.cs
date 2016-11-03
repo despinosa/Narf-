@@ -5,15 +5,13 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Windows.Interop;
 using Emgu.CV;
+using System.Drawing;
 
-namespace Emgu.CV.WPF
-{
-   public static class BitmapSourceConvert
-   {
+namespace Narf.Util {
+  public static class BitmapSourceConvert {
       /// <summary>
       /// Delete a GDI object
       /// </summary>
@@ -27,17 +25,16 @@ namespace Emgu.CV.WPF
       /// </summary>
       /// <param name="image">The Emgu CV Image</param>
       /// <returns>The equivalent BitmapSource</returns>
-      public static BitmapSource ToBitmapSource(IImage image)
-      {
-         using (System.Drawing.Bitmap source = image.Bitmap)
-         {
+      public static BitmapSource ToBitmapSource(IImage image) {
+         using (Bitmap source = image.Bitmap) {
             IntPtr ptr = source.GetHbitmap(); //obtain the Hbitmap
 
-            BitmapSource bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+            BitmapSource bs = Imaging.CreateBitmapSourceFromHBitmap(
                 ptr,
                 IntPtr.Zero,
                 Int32Rect.Empty,
-                System.Windows.Media.Imaging.BitmapSizeOptions.FromEmptyOptions());
+                BitmapSizeOptions.FromEmptyOptions()
+            );
 
             DeleteObject(ptr); //release the HBitmap
             return bs;

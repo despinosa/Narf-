@@ -13,7 +13,7 @@
   <Grid Margin="10" Height="580" Width="745">
     <Grid.ColumnDefinitions>
       <ColumnDefinition />
-      <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="145"/>
     </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="40"/>
@@ -28,16 +28,16 @@
     <Label Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" HorizontalAlignment="Left" FontFamily="Trebuchet MS" FontWeight="Bold" FontSize="18" Content="Asistente para análisis ansiolítico en roedores" Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}"/>
     <!-- Preview -->
     <!-- Image Name="previewDisplay" Grid.Column="0" Grid.Row="1" Width="550" Height="285" Margin="0, 5" Grid.ColumnSpan="2"/ -->
-    <WindowsFormsHost Grid.Column="0" Grid.Row="1" Width="550" Height="285" Margin="0, 5" Grid.ColumnSpan="2">
+    <WindowsFormsHost Grid.Column="0" Grid.Row="1" Width="550" Height="285" Margin="0, 5">
       <emgu:ImageBox x:Name="previewDisplay" Width="550" Height="285"/>
     </WindowsFormsHost>
     <!-- Subtitle -->
-    <Border Grid.Column="0" Grid.Row="2" Height="35" Width="440" HorizontalAlignment="Right" Margin="5, 0" Padding="5" Background="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}">
+    <Border Grid.Column="0" Grid.Row="2" Height="35" Width="550" Margin="5, 0" Padding="5" Background="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}">
       <Label VerticalAlignment="Center" Foreground="White">Casos previos</Label>
     </Border>
     
     <!-- List -->
-    <ListView Name="casesList" Grid.Column="0" Grid.Row="3" Grid.RowSpan="4" Margin="5, 0" Height="208" Width="440" HorizontalAlignment="Right" ItemsSource="{Binding Cases}" SelectionMode="Single" SelectionChanged="casesList_SelectionChanged">
+    <ListView Name="casesList" Grid.Column="0" Grid.Row="3" Grid.RowSpan="4" Margin="5, 0" Height="208" Width="550" ItemsSource="{Binding Cases}" SelectionMode="Single" SelectionChanged="casesList_SelectionChanged">
       <ListView.View>
         <GridView>
           <GridViewColumn Header="Sustancia" DisplayMemberBinding="{Binding Substance}" />
@@ -72,20 +72,15 @@
     </ListView>
 
     <!-- Settings button -->
-    <Button Name="settingsBttn" Grid.Column="1" Grid.Row="2" Width="100" HorizontalAlignment="Left"
-  Height="25" Content=" Ajustes"/>
+    <Button Name="settingsBttn" Grid.Column="1" Grid.Row="2" Width="100" Height="25" Content=" Ajustes"/>
     <!-- Help button -->
-    <Button Name="helpBttn" Grid.Column="1" Grid.Row="3" Width="100" HorizontalAlignment="Left"
-  Height="25" Margin="0,5" VerticalAlignment="Top" Content="Ayuda"/>
+    <Button Name="helpBttn" Grid.Column="1" Grid.Row="3" Width="100" Height="25" Margin="0,5" VerticalAlignment="Top" Content="Ayuda"/>
     <!-- Analyze new button -->
-    <Button Name="newCaseBttn" Grid.Column="1" Grid.Row="4" Width="100" HorizontalAlignment="Left"
-  Height="25" Margin="0,5" VerticalAlignment="Bottom" Click="newCaseBttn_Click" Content="Nuevo caso..."/>
+    <Button Name="newCaseBttn" Grid.Column="1" Grid.Row="4" Width="100" Height="25" Margin="0,5" VerticalAlignment="Bottom" Click="newCaseBttn_Click" Content="Nuevo caso..."/>
     <!-- View report button -->
-    <Button Name="delCaseBttn" Grid.Column="1" Grid.Row="5" Width="100" HorizontalAlignment="Left"
-  Height="25" Margin="0,5" VerticalAlignment="Bottom" Click="delCaseBttn_Click" Content="Eliminar caso"/>
+    <Button Name="delCaseBttn" Grid.Column="1" Grid.Row="5" Width="100" Height="25" Margin="0,5" VerticalAlignment="Bottom" Click="delCaseBttn_Click" Content="Eliminar caso"/>
     <!-- View report button -->
-    <Button Name="resultsBttn" Grid.Column="1" Grid.Row="6" Width="100" HorizontalAlignment="Left"
-  Height="25" Margin="0,5" VerticalAlignment="Bottom" Content="Ver resultados"/>
+    <Button Name="resultsBttn" Grid.Column="1" Grid.Row="6" Width="100" Height="25" Margin="0,5" VerticalAlignment="Bottom" Click="resultsBttn_Click" Content="Ver resultados"/>
   </Grid>
   <!-- Page.Background>
 <ImageBrush ImageSource="/resources/background.jpg"/>

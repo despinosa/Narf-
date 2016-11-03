@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Narf.Logic.Util {
+namespace Narf.Util {
   class CyclicBuffer<T> {
     bool _finished = false;
     public bool Finished {
@@ -16,16 +16,16 @@ namespace Narf.Logic.Util {
         _finished = true;
       }
     }
-    public bool HasBackward {
+    public bool HasBack {
       get {
-        return TotalWritten > ReadIndex &&
-          ReadIndex != Modulo(TotalWritten, Size);
+        return 0 < ReadIndex && ReadIndex < TotalWritten &&
+          Modulo(ReadIndex, Size) != Modulo(TotalWritten, Size);
       }
     }
-    public bool HasForward {
+    public bool HasFront {
       get {
-        return ReadIndex != Modulo(TotalWritten - 1, Size)
-          && TotalWritten > ReadIndex;
+        return Modulo(ReadIndex, Size) != Modulo(TotalWritten - 1, Size)
+          && 0 <= ReadIndex && ReadIndex <= TotalWritten;
       }
     }
     public int Size { get; }
@@ -48,25 +48,25 @@ namespace Narf.Logic.Util {
       IsDisposable = typeof(T).IsAssignableFrom(typeof(IDisposable));
       Content = new T[Size];
       Lock = new object();
-      MaxAhead = Size / 2;
+      MaxAhead = 2 * Size / 3;
       DejaVu = 0;
       Ahead = new Semaphore(MaxAhead, MaxAhead);
     }
 
-    public T BackwardRead() {
-      if (!HasBackward) return default(T);
+    public T ReadBack() {
+      if (!HasBack) return default(T);
       lock (Lock) {
         ++DejaVu;
         return Content[Modulo(--ReadIndex, Size)];
       }
     }
 
-    public T ForwardRead() {
-      if (Finished && !HasForward) return default(T);
+    public T Read() {
+      if (Finished && !HasFront) return default(T);
       lock (Lock) {
-        Ahead.Release();
-        if (DejaVu > 0) DejaVu--;
-        // else if (!Finished) Ahead.Release();
+        if (DejaVu > 0) --DejaVu;
+        else if (!Finished) Ahead.Release();
+        // Ahead.Release();
         return Content[Modulo(ReadIndex++, Size)];
       }
     }

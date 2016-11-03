@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace Narf.View {
+namespace Narf.Util {
   public class RadialPanel : Panel {
     protected override Size MeasureOverride(Size availableSize) {
       foreach (UIElement elem in Children) {

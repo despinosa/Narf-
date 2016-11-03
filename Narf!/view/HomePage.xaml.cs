@@ -1,7 +1,6 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
-using Emgu.CV.WPF;
 using Microsoft.Win32;
 using Narf.Model;
 using System;
@@ -20,6 +19,7 @@ namespace Narf.View {
     static readonly short MAX_SOURCES = 3;
     ICollection<Case> Cases { get; set; }
     NewCasePage NewCasePage { get; set; }
+    ResultsPage ResultsPage { get; set; }
     Entities Session { get; }
 
     public HomePage() {
@@ -73,7 +73,12 @@ namespace Narf.View {
 
     void casesList_SelectionChanged(object sender, RoutedEventArgs args) {
       var selected = (Case)casesList.SelectedItem;
-      // TO DO
+      // TO DO: actualizar preview
+    }
+
+    private void resultsBttn_Click(object sender, RoutedEventArgs e) {
+      ResultsPage = new ResultsPage((Case)casesList.SelectedItem);
+      NavigationService.Navigate(ResultsPage);
     }
   }
 }

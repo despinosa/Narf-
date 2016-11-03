@@ -101,14 +101,15 @@ namespace Narf.View {
 
     public void Next_Click(object sender, RoutedEventArgs args) {
       var nextFrames = Analyzer.NextFrames();
+      if (nextFrames.All(f => f == null)) return;
       foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
-        Displays[angle].Source = new BitmapImage(new Uri(@"/Resources/offline.png", UriKind.Relative));
-        nextFrames.ElementAt(angle);
+        Displays[angle].Source = nextFrames.ElementAt(angle);
       }
     }
 
     public void Prev_Click(object sender, RoutedEventArgs args) {
       var prevFrames = Analyzer.PrevFrames();
+      if (prevFrames.All(f => f == null)) return;
       foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
         Displays[angle].Source = prevFrames.ElementAt(angle);
       }
