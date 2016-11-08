@@ -29,23 +29,24 @@ namespace Narf.View {
       Events = (from e in Case.BehaviourEvents
                 select new TimelineEvent() {
                   EventColor = "Green",
-                  Title = "Evento conductual",
-                  Description = e.Behaviour.Name,
+                  Description = "evento conductual",
+                  Title = e.Behaviour.Name,
                   StartDate = (new DateTime()).AddSeconds(e.Time)
                 }).ToList();
       Events.AddRange(from t in Case.Transitions
                       select new TimelineEvent() {
                         EventColor = "Purple",
-                        Title = "Transición",
-                        Description = Enum.GetName(typeof(Zone), t.From) + " a " +
+                        Description = "transición",
+                        Title = Enum.GetName(typeof(Zone), t.From) + " a " +
                           Enum.GetName(typeof(Zone), t.To),
                         StartDate = (new DateTime()).AddSeconds(t.Time)
                       });
       InitializeComponent();
     }
 
-    private void Timeline_TimelineReady(object sender, EventArgs args) {
-      Timeline.ResetEvents(Events);
+    private void _timeline_TimelineReady(object sender, EventArgs args) {
+      _timeline.MaxDateTime = (new DateTime()).AddSeconds(Case.Duration);
+      _timeline.ResetEvents(Events);
     }
   }
 }

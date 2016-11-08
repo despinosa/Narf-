@@ -18,15 +18,15 @@
     <WindowsFormsHost Grid.Row="0">
       <emgu:ImageBox Name="Display" FunctionalMode="PanAndZoom" SizeMode="StretchImage"/>
     </WindowsFormsHost>
-    <timeline:TimelineTray x:Name="Timeline" Grid.Row="1" CurrentDateTime="1/1/0001 00:00:00" MinDateTime="1/1/0001 00:00:00" MaxDateTime="1/1/0001 01:00:00" TimelineReady="Timeline_TimelineReady" DescriptionWidth="100">
+    <timeline:TimelineTray x:Name="_timeline" Grid.Row="1" CurrentDateTime="1/1/0001 00:00:00" MinDateTime="1/1/0001 00:00:00" MaxDateTime="1/1/0001 00:25:00" TimelineReady="_timeline_TimelineReady" DescriptionWidth="100">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="50"/>
+        <RowDefinition Height="25"/>
       </Grid.RowDefinitions>
       <timeline:TimelineToolbox Grid.Row="0"/>
       <timeline:TimelineBand Grid.Row="1" IsMainBand="True" ItemSourceType="seconds" HorizontalAlignment="Stretch" MaxEventHeight="50" VerticalContentAlignment="Stretch" TimelineWindowSize="20"/>
-      <timeline:TimelineBand Grid.Row="2" HorizontalAlignment="Stretch" ItemSourceType="minutes" TimelineWindowSize="5" MaxEventHeight="3"/>
+      <timeline:TimelineBand Grid.Row="2" HorizontalAlignment="Stretch" ItemSourceType="minutes" TimelineWindowSize="5" MaxEventHeight="4"/>
     </timeline:TimelineTray>
   </Grid>
 </Page>

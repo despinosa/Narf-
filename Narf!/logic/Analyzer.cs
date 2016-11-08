@@ -1,8 +1,11 @@
 ﻿using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Cvb;
+using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
 using Narf.Util;
 using Narf.Model;
+using Narf.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +16,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 
 namespace Narf.Logic {
-  public enum SourceAngle { Aerial, Closed, Open }
+  public enum CaptureAngle { Aerial, Closed, Open }
 
-  class Analyzer : IDisposable {
-    public static Analyzer ForCase(Case @case, Capture[] sources) {
+  public class Analyzer : IDisposable {
+    public static Analyzer ForCase(Case @case, IEnumerable<Capture> captures) {
       switch (@case.Maze) {
         default:
-          return new Analyzer(@case, sources);
+          return new Analyzer(@case, captures);
         /* TO DO: hacer abstracta e implementar estas subclases
         case Maze.None:
           return new NoMazeAnalyzer(case_, sources);
@@ -30,30 +33,34 @@ namespace Narf.Logic {
                                             case_.Maze.ToString()); */
       }
     }
-    static readonly int BUFFER_SIZE = 30;
+
+
     public double DeltaT { get; }
     public double TimePlaying { get; protected set; }
-    public Capture[] Sources { get; }
+    public IEnumerable<Capture> Captures { get; }
     protected Case Case { get; }
-    protected CyclicBuffer<ImageSource>[] FrameBuffers { get; }
-    protected ImagePreprocessor ImagePreprocessor { get; }
-    protected ObjectTracker ObjectTracker { get; }
+    protected CvBlob Blob { get; set; }
+    protected CvTracks Tracks { get; }
+    protected IEnumerable<CyclicBuffer<ImageSource>> FrameBuffers { get; }
     protected Thread Worker { get; }
 
-    public Analyzer(Case @case, Capture[] sources) {
+    public Analyzer(Case @case, IEnumerable<Capture> sources) {
       Case = @case;
-      Sources = sources;
-      FrameBuffers = new CyclicBuffer<ImageSource>[Sources.Length];
-      DeltaT = 1 / (from s in Sources select
+      Captures = sources;
+      FrameBuffers = new CyclicBuffer<ImageSource>[Captures.Count()];
+      DeltaT = 1 / (from s in Captures select
                     s.GetCaptureProperty(CapProp.Fps)).Average();
-      FrameBuffers = (from s in Sources select new
-                      CyclicBuffer<ImageSource>(BUFFER_SIZE)).ToArray();
+      FrameBuffers = (
+        from s in Captures select new
+        CyclicBuffer<ImageSource>(Settings.Default.VideoBufferSize)
+      ).ToArray();
       TimePlaying = 0;
+      Tracks = new CvTracks();
       Worker = new Thread(AnalyzeAndBuffer);
       Worker.Start();
     }
 
-    protected virtual void AnalyzeFrames(IEnumerable<Mat> frames,
+    protected virtual void AnalyzeFrames(IEnumerable<Image<Hsv, byte>> frames,
                                          double time) {
     }
     
@@ -62,13 +69,21 @@ namespace Narf.Logic {
       Mat[] newFrames;
       do {
         headStart += DeltaT;
-        newFrames = (from s in Sources select s.QuerySmallFrame()).ToArray();
-        foreach (int angle in Enum.GetValues(typeof(SourceAngle))) {
-          var converted = BitmapSourceConvert.ToBitmapSource(newFrames[angle]);
-          converted.Freeze();
-          FrameBuffers[angle].Write(converted);
+        newFrames = (from s in Captures select s.QuerySmallFrame()).ToArray();
+        var asImages = (from f in newFrames select
+                        f.ToImage<Hsv, byte>()).ToArray();
+#if DEBUG
+        AnalyzeFrames(asImages, TimePlaying + headStart);
+#endif
+        foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
+          var asSource = BitmapSourceConvert.ToBitmapSource(newFrames[angle]);
+          asSource.Freeze();
+          FrameBuffers.ElementAt(angle).Write(asSource);
         }
-        AnalyzeFrames(newFrames, TimePlaying + headStart);
+#if DEBUG
+#else
+        AnalyzeFrames(asImages, TimePlaying + headStart);
+#endif
       } while (newFrames.All(f => f != null));
       foreach (var buffer in FrameBuffers) buffer.Finished = true;
     }
@@ -94,8 +109,9 @@ namespace Narf.Logic {
     }
 
     public void Dispose() {
-      foreach (var s in Sources) s.Dispose();
-      Worker.Join();
+      foreach (var source in Captures) source.Dispose();
+      foreach (var buffer in FrameBuffers) buffer.Dispose();
+      if (!Worker.Join(500)) Worker.Abort(); // probar harrrto!
     }
   }
 }

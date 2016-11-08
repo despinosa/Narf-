@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Narf.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Narf.Util {
-  class CyclicBuffer<T> {
+  public class CyclicBuffer<T> : IDisposable {
     bool _finished = false;
     public bool Finished {
       get {
@@ -31,7 +32,7 @@ namespace Narf.Util {
     public int Size { get; }
     public int MaxAhead { get; }
     public int TotalWritten { get; private set; }
-    bool IsDisposable { get; }
+    bool TIsDisposable { get; }
     int ReadIndex { get; set; }
     int DejaVu { get; set; }
     object Lock { get; }
@@ -40,15 +41,15 @@ namespace Narf.Util {
 
     static int Modulo(int x, int m) {
       int r = x % m;
-      return r < 0 ? r + m : r; 
+      return r < 0 ? r + m : r;
     }
 
     public CyclicBuffer(int size) {
       Size = size;
-      IsDisposable = typeof(T).IsAssignableFrom(typeof(IDisposable));
+      TIsDisposable = typeof(T).IsAssignableFrom(typeof(IDisposable));
       Content = new T[Size];
       Lock = new object();
-      MaxAhead = 2 * Size / 3;
+      MaxAhead = (int)(Size * Settings.Default.BufferAheadRatio);
       DejaVu = 0;
       Ahead = new Semaphore(MaxAhead, MaxAhead);
     }
@@ -76,10 +77,18 @@ namespace Narf.Util {
       Ahead.WaitOne();
       lock (Lock) {
         if (Content[Modulo(TotalWritten, Size)] != null
-            && IsDisposable) {
+            && TIsDisposable) {
           ((IDisposable)Content[Modulo(TotalWritten, Size)]).Dispose();
         }
         Content[Modulo(TotalWritten++, Size)] = item;
+      }
+    }
+
+    public void Dispose() {
+      Finished = true;
+      Ahead.Dispose();
+      if (TIsDisposable) {
+        foreach (var item in Content) ((IDisposable)item).Dispose();
       }
     }
   }

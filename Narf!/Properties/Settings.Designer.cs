@@ -22,5 +22,53 @@ namespace Narf.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int VideoBufferSize {
+            get {
+                return ((int)(this["VideoBufferSize"]));
+            }
+            set {
+                this["VideoBufferSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.6666667")]
+        public float BufferAheadRatio {
+            get {
+                return ((float)(this["BufferAheadRatio"]));
+            }
+            set {
+                this["BufferAheadRatio"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int FilterGaussianSize {
+            get {
+                return ((int)(this["FilterGaussianSize"]));
+            }
+            set {
+                this["FilterGaussianSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FilterGaussian {
+            get {
+                return ((bool)(this["FilterGaussian"]));
+            }
+            set {
+                this["FilterGaussian"] = value;
+            }
+        }
     }
 }
