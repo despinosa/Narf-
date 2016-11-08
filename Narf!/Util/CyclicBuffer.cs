@@ -13,7 +13,7 @@ namespace Narf.Util {
       get {
         return _finished;
       }
-      protected set {
+      set {
         _finished = true;
       }
     }

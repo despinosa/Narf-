@@ -12,8 +12,7 @@ namespace Narf.Util.Tests {
     [TestMethod()]
     public void FinishedTest() {
       var buffer = new CyclicBuffer<char>(10);
-      bool finished = buffer.Finished;
-      Assert.IsFalse(finished);
+      Assert.IsFalse(buffer.Finished);
       buffer.Write('o');
       buffer.Write('l');
       buffer.Write('a');
@@ -22,8 +21,7 @@ namespace Narf.Util.Tests {
       buffer.Write('a');
       buffer.Write('s');
       buffer.Dispose();
-      finished = buffer.Finished;
-      Assert.IsTrue(finished);
+      Assert.IsTrue(buffer.Finished);
       buffer.Write('e');
       var builder = new StringBuilder();
       char read;
