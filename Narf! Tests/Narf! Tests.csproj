@@ -75,6 +75,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="CaseTests.cs" />
+    <Compile Include="Util\CyclicBufferTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
