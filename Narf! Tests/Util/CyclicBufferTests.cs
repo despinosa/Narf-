@@ -35,40 +35,55 @@ namespace Narf.Util.Tests {
     [TestMethod()]
     public void HasBack() {
       var buffer = new CyclicBuffer<char>(10);
+      var builder = new StringBuilder();
       buffer.Write('o');
       buffer.Write('l');
       buffer.Write('i');
       buffer.Write('t');
       buffer.Write('a');
       char read;
-      read = buffer.Read();
+      buffer.Read();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
 
-      read = buffer.Read();
+      buffer.Read();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
 
-      read = buffer.Read();
+      buffer.Read();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
 
-      read = buffer.Read();
+      buffer.Read();
       Assert.IsFalse(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
 
-      read = buffer.ReadBack();
+      buffer.ReadBack();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
 
       read = buffer.ReadBack();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
-
-      var builder = new StringBuilder();
       builder.Append(read);
-
       Assert.AreEqual(builder.ToString(), "i");
+
+      read = buffer.ReadBack();
+      Assert.IsTrue(buffer.HasFront, "NO HasFront");
+      Assert.IsTrue(buffer.HasBack);
+      builder.Append(read);
+      Assert.AreEqual(builder.ToString(), "il");
+
+
+      read = buffer.ReadBack();
+      Assert.IsTrue(buffer.HasFront, "NO HasFront");
+      Assert.IsFalse(buffer.HasBack, "No HasBack");
+      builder.Append(read);
+      Assert.AreEqual(builder.ToString(), "ilo");
+
+
+
+
     }
 
     /*[TestMethod()]
