@@ -78,7 +78,11 @@ namespace Narf.Logic {
         foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
           var asSource = BitmapSourceConvert.ToBitmapSource(newFrames[angle]);
           asSource.Freeze();
-          FrameBuffers.ElementAt(angle).Write(asSource);
+          try {
+            FrameBuffers.ElementAt(angle).Write(asSource);
+          } catch (ThreadInterruptedException exc) {
+            return;
+          }
         }
 #if DEBUG
 #else
@@ -111,7 +115,10 @@ namespace Narf.Logic {
     public void Dispose() {
       foreach (var source in Captures) source.Dispose();
       foreach (var buffer in FrameBuffers) buffer.Dispose();
-      if (!Worker.Join(500)) Worker.Abort(); // probar harrrto!
+      if (!Worker.Join(500)) { // probar harrrto!
+        Worker.Interrupt();
+        Worker.Abort();
+      }
     }
   }
 }

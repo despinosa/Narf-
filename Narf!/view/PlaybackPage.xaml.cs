@@ -43,7 +43,10 @@ namespace Narf.View {
       OverlayPanel = new OverlayPanel(Session, this);
       ResultsPage = new ResultsPage(Case);
       InitializeComponent();
+      RefreshTimer.Interval = TimeSpan.FromSeconds(Analyzer.DeltaT);
+      RefreshTimer.Tick += Refresh;
       RefreshTimer.Start();
+      Application.Current.MainWindow.Closing += (s, a) => Cleanup();
     }
 
     void Refresh(object sender, EventArgs args) {
@@ -51,6 +54,7 @@ namespace Narf.View {
       var newFrames = Analyzer.NextFrames();
       if (newFrames.All(f => f == null)) {
         timer.Stop();
+        Finished();
       } else {
         foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
           Displays.ElementAt(angle).Source = newFrames.ElementAt(angle);
@@ -58,8 +62,13 @@ namespace Narf.View {
       }
     }
 
-    void CleanupHandler(object sender, EventArgs args) {
+    void Cleanup() {
       Analyzer.Dispose();
+      RefreshTimer.Stop();
+    }
+
+    void Finished() {
+      Cleanup();
       NavigationService.Navigate(ResultsPage);
     }
 
@@ -70,8 +79,6 @@ namespace Narf.View {
       Panel.SetZIndex(OverlayPanel, 1000);
       _mainPanel.Children.Add(OverlayPanel);
       Displays = new Image[3] { mainDisplay, leftDisplay, rightDisplay };
-      RefreshTimer.Interval = TimeSpan.FromSeconds(Analyzer.DeltaT);
-      RefreshTimer.Tick += Refresh;
     }
 
     void Panel_MouseEnter(object sender, MouseEventArgs args) {

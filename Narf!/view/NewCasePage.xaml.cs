@@ -53,9 +53,8 @@ namespace Narf.View {
 
     bool Validate() {
       var valid = _date.SelectedDate != null && _time.Value != null &&
-        mazeCombo.SelectedItem != null && _substance.Text != "" &&
-        _subject.Text != "" && _weight.Value != null &&
-        Ordered.All(o => o != null);
+        mazeCombo.SelectedItem != null && Ordered.All(o => o != null) &&
+        _subject.Text != "" && _weight.Value != null;
       if (!valid) {
         MessageBox.Show("Debe llenar todos los datos.",
                         "Datos incompletos", MessageBoxButton.OK,
@@ -72,9 +71,7 @@ namespace Narf.View {
       var date = (DateTime)_date.SelectedDate +
         ((DateTime)_time.Value).TimeOfDay;
       var videoHash = 0;
-      foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
-        videoHash ^= Unordered.ElementAt(angle).GetHashCode();
-      }
+      foreach (var capture in Ordered) videoHash ^= capture.GetHashCode();
       Case = new Case() {
         Maze = (Maze)mazeCombo.SelectedItem, Substance = _substance.Text,
         Dose = _dose.Value, Date = date, Duration = (short)duration,
