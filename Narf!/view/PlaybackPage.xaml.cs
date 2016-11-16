@@ -30,7 +30,7 @@ namespace Narf.View {
     Case Case { get; set; }
     DispatcherTimer RefreshTimer { get; }
     Entities Session { get; }
-    IEnumerable<Image> Displays { get; }
+    IEnumerable<Image> Displays { get; set; }
     OverlayPanel OverlayPanel { get; }
     ResultsPage ResultsPage { get; }
 
@@ -40,7 +40,6 @@ namespace Narf.View {
       Case = @case;
       Analyzer = Analyzer.ForCase(@case, captures); // puede lanzar excepción
       RefreshTimer = new DispatcherTimer(DispatcherPriority.Render);
-      Displays = new Image[3] { mainDisplay, leftDisplay, rightDisplay };
       OverlayPanel = new OverlayPanel(Session, this);
       ResultsPage = new ResultsPage(Case);
       InitializeComponent();
@@ -70,6 +69,7 @@ namespace Narf.View {
       Grid.SetColumnSpan(OverlayPanel, 2);
       Panel.SetZIndex(OverlayPanel, 1000);
       _mainPanel.Children.Add(OverlayPanel);
+      Displays = new Image[3] { mainDisplay, leftDisplay, rightDisplay };
       RefreshTimer.Interval = TimeSpan.FromSeconds(Analyzer.DeltaT);
       RefreshTimer.Tick += Refresh;
     }
