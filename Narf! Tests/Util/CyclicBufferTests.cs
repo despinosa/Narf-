@@ -34,13 +34,13 @@ namespace Narf.Util.Tests {
 
     [TestMethod()]
     public void HasBack() {
-      var buffer = new CyclicBuffer<char>(10);
+      var buffer = new CyclicBuffer<char>(8);
       var builder = new StringBuilder();
-      buffer.Write('o');
-      buffer.Write('l');
-      buffer.Write('i');
-      buffer.Write('t');
       buffer.Write('a');
+      buffer.Write('b');
+      buffer.Write('c');
+      buffer.Write('d');
+      buffer.Write('e');
       char read;
       buffer.Read();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
@@ -66,22 +66,46 @@ namespace Narf.Util.Tests {
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
       builder.Append(read);
-      Assert.AreEqual(builder.ToString(), "i");
+      Assert.AreEqual(builder.ToString(), "c");
 
       read = buffer.ReadBack();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsTrue(buffer.HasBack);
       builder.Append(read);
-      Assert.AreEqual(builder.ToString(), "il");
+      Assert.AreEqual(builder.ToString(), "cb");
 
 
       read = buffer.ReadBack();
       Assert.IsTrue(buffer.HasFront, "NO HasFront");
       Assert.IsFalse(buffer.HasBack, "No HasBack");
       builder.Append(read);
-      Assert.AreEqual(builder.ToString(), "ilo");
+      Assert.AreEqual(builder.ToString(), "cba");
 
 
+      buffer.Write('f');
+
+      read = buffer.Read();
+      //Assert.IsTrue(buffer.HasFront, "NO HasFront");
+      //Assert.IsFalse(buffer.HasBack, "No HasBack");
+      builder.Append(read);
+      Assert.AreEqual(builder.ToString(), "cbaa");
+      buffer.Read();
+      buffer.Read();
+      buffer.Read();
+      buffer.Read();
+      read = buffer.Read();
+      Assert.IsTrue(buffer.HasFront, "NO HasFront");
+      Assert.IsFalse(buffer.HasBack, "No HasBack");
+      builder.Append(read);
+      Assert.AreEqual(builder.ToString(), "cbaaf");
+
+      buffer.Write('g');
+      buffer.Write('h');
+      buffer.Write('i');
+      buffer.Write('j');
+      buffer.Write('k');
+      buffer.Read();
+      buffer.Write('l');
 
 
     }
