@@ -153,6 +153,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Logic\Analyzer.cs" />
+    <Compile Include="Logic\Imaging\BehaviourMatcher.cs" />
+    <Compile Include="Logic\Imaging\Initializer.cs" />
+    <Compile Include="Logic\Imaging\SubjectTracker.cs" />
     <Compile Include="Logic\NoMazeAnalyzer.cs" />
     <Compile Include="Util\CyclicBuffer.cs" />
     <Compile Include="Logic\XMazeAnalyzer.cs" />

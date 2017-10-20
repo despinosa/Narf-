@@ -4,6 +4,7 @@ using Emgu.CV.Cvb;
 using Emgu.CV.Structure;
 using Emgu.CV.VideoSurveillance;
 using Narf.Util;
+using Narf.Logic.Imaging;
 using Narf.Model;
 using Narf.Properties;
 using System;
@@ -18,11 +19,15 @@ using System.Windows.Media;
 namespace Narf.Logic {
   public enum CaptureAngle { Aerial, Closed, Open }
 
+  public delegate void NewFrameLoaded(object sender, EventArgs args);
+
   public class Analyzer : IDisposable {
-    public static Analyzer ForCase(Case @case, IEnumerable<Capture> captures) {
+    // TO DO: revisar diseño debajo, tal vez podemos hacerla concreta
+    public static Analyzer ForCase(Case @case, IEnumerable<Capture> captures,
+                                   Entities session) {
       switch (@case.Maze) {
         default:
-          return new Analyzer(@case, captures);
+          return new Analyzer(@case, captures, session);
         /* TO DO: hacer abstracta e implementar estas subclases
         case Maze.None:
           return new NoMazeAnalyzer(case_, sources);
@@ -34,20 +39,20 @@ namespace Narf.Logic {
       }
     }
 
-
     public double DeltaT { get; }
     public double TimePlaying { get; protected set; }
     public IEnumerable<Capture> Captures { get; }
     protected Case Case { get; }
-    protected CvBlob Blob { get; set; }
-    protected CvTracks Tracks { get; }
     protected IEnumerable<CyclicBuffer<ImageSource>> FrameBuffers { get; }
     protected Thread Worker { get; }
+    Initializer Initializer;
+    SubjectTracker Tracker;
+    BehaviourMatcher Matcher;
 
-    public Analyzer(Case @case, IEnumerable<Capture> sources) {
+    public Analyzer(Case @case, IEnumerable<Capture> sources,
+                    Entities session) {
       Case = @case;
       Captures = sources;
-      FrameBuffers = new CyclicBuffer<ImageSource>[Captures.Count()];
       DeltaT = 1 / (from s in Captures select
                     s.GetCaptureProperty(CapProp.Fps)).Average();
       FrameBuffers = (
@@ -55,56 +60,60 @@ namespace Narf.Logic {
         CyclicBuffer<ImageSource>(Settings.Default.VideoBufferSize)
       ).ToArray();
       TimePlaying = 0;
-      Tracks = new CvTracks();
       Worker = new Thread(AnalyzeAndBuffer);
       Worker.Start();
     }
-
-    protected virtual void AnalyzeFrames(IEnumerable<Image<Hsv, byte>> frames,
-                                         double time) {
-    }
     
     protected virtual void AnalyzeAndBuffer() {
-      double headStart = 0;
-      Mat[] newFrames;
+      int count = 0;
+      bool isInitializing = true;
+      var imager = new Thread(Initializer.Detect);
+      var matcher = new Thread(Matcher.Match);
+      Mat[] asMats;
       do {
-        headStart += DeltaT;
-        newFrames = (from s in Captures select s.QuerySmallFrame()).ToArray();
-        var asImages = (from f in newFrames select
+        count += 1;
+        asMats = (from s in Captures select s.QuerySmallFrame()).ToArray();
+        if (count % 3 == 0) {
+          if (imager.IsAlive) imager.Join();
+          if (isInitializing) imager = new Thread(Initializer.Detect);
+          else imager = new Thread(Tracker.Track);
+          imager.Start(asMats[(int)CaptureAngle.Aerial]);
+        }
+        if (count % 5 == 0 && !isInitializing) {
+          if (imager.IsAlive) matcher.Join();
+          matcher = new Thread(Initializer.Detect);
+          matcher.Start(asMats);
+        }
+# if DEBUG
+        var asImages = (from f in asMats select
                         f.ToImage<Hsv, byte>()).ToArray();
-#if DEBUG
-        AnalyzeFrames(asImages, TimePlaying + headStart);
-#endif
+# endif
         foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
-          var asSource = BitmapSourceConvert.ToBitmapSource(newFrames[angle]);
+          var asSource = BitmapSourceConvert.ToBitmapSource(asMats[angle]);
           asSource.Freeze();
           try {
             FrameBuffers.ElementAt(angle).Write(asSource);
-          } catch (ThreadInterruptedException exc) {
+          } catch (ThreadInterruptedException interruption) {
             return;
           }
         }
-#if DEBUG
-#else
-        AnalyzeFrames(asImages, TimePlaying + headStart);
-#endif
-      } while (newFrames.All(f => f != null));
+      } while (asMats.All(f => f != null));
       foreach (var buffer in FrameBuffers) buffer.Finished = true;
     }
 
-    public IEnumerable<ImageSource> NextFrames() {
+    public IEnumerable<ImageSource> GetNextFrames() {
       TimePlaying += (from b in FrameBuffers where b.HasFront
                       select DeltaT).FirstOrDefault();
       return (from b in FrameBuffers select b.Read()).ToArray();
     }
 
-    public IEnumerable<ImageSource> PrevFrames() {
+    public IEnumerable<ImageSource> GetPrevFrames() {
       TimePlaying -= (from b in FrameBuffers where b.HasBack
                       select DeltaT).FirstOrDefault();
       return (from b in FrameBuffers select b.ReadBack()).ToArray();
     }
 
-    public void BehaviourTriggered(Behaviour behaviour) {
+    public void TriggerBehaviour(Behaviour behaviour) {
       var @event = new BehaviourEvent() {
         Case = Case, Behaviour = behaviour, Time = (short)TimePlaying
       };
