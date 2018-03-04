@@ -38,7 +38,8 @@ namespace Narf.View {
                         IEnumerable<Capture> captures) {
       Session = session;
       Case = @case;
-      Analyzer = Analyzer.ForCase(@case, captures); // puede lanzar excepción
+      Analyzer = Analyzer.ForCase(@case, captures, session);
+      // puede lanzar excepción
       RefreshTimer = new DispatcherTimer(DispatcherPriority.Render);
       OverlayPanel = new OverlayPanel(Session, this);
       ResultsPage = new ResultsPage(Case);
@@ -51,7 +52,7 @@ namespace Narf.View {
 
     void Refresh(object sender, EventArgs args) {
       var timer = (DispatcherTimer)sender;
-      var newFrames = Analyzer.NextFrames();
+      var newFrames = Analyzer.GetNextFrames();
       if (newFrames.All(f => f == null)) {
         timer.Stop();
         Finished();
@@ -105,7 +106,7 @@ namespace Narf.View {
     }
 
     public void Next_Click(object sender, RoutedEventArgs args) {
-      var nextFrames = Analyzer.NextFrames();
+      var nextFrames = Analyzer.GetNextFrames();
       if (nextFrames.All(f => f == null)) return;
       foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
         Displays.ElementAt(angle).Source = nextFrames.ElementAt(angle);
@@ -113,7 +114,7 @@ namespace Narf.View {
     }
 
     public void Prev_Click(object sender, RoutedEventArgs args) {
-      var prevFrames = Analyzer.PrevFrames();
+      var prevFrames = Analyzer.GetPrevFrames();
       if (prevFrames.All(f => f == null)) return;
       foreach (int angle in Enum.GetValues(typeof(CaptureAngle))) {
         Displays.ElementAt(angle).Source = prevFrames.ElementAt(angle);
@@ -122,7 +123,7 @@ namespace Narf.View {
 
     public void Behaviour_Click(object sender, RoutedEventArgs args) {
       var behaviour = (Behaviour)sender;
-      Analyzer.BehaviourTriggered(behaviour);
+      Analyzer.TriggerBehaviour(behaviour);
       Session.SaveChangesAsync();
       MouseEnter += Panel_MouseEnter;
       MouseLeave += Panel_MouseLeave;
